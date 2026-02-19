@@ -12,9 +12,9 @@ Abaixo estão um quadro com todos os ADRs deste desafio. Cada um documenta o con
 
 | ADR         | O que vai encontrar?                    |
 |-------------|-----------------------------------------|
-| [ADR-001]() | Definição do banco de dados             |
-| [ADR-002]() | Definição arquitetural                  |
-| [ADR-003]() | Event Sourcing                          |
-| [ADR-004]() |	Validação encapsulada no domínio        | 
-| [ADR-005]() |	Autenticação e Autorização              |  
-| [ADR-006]() |	Contrato consistente Backend ↔ Frontend | 
+| [ADR-001](https://github.com/alexandredorea/Challenge.CRM.Rommanel/blob/master/docs/ADR-001.md) | Definição do banco de dados             |
+| [ADR-002](https://github.com/alexandredorea/Challenge.CRM.Rommanel/blob/master/docs/ADR-002.md) | Definição arquitetural                  |
+| [ADR-003](https://github.com/alexandredorea/Challenge.CRM.Rommanel/blob/master/docs/ADR-003.md) | Event Sourcing                          |
+| [ADR-004](https://github.com/alexandredorea/Challenge.CRM.Rommanel/blob/master/docs/ADR-004.md) |	Validação encapsulada no domínio        | 
+| [ADR-005](https://github.com/alexandredorea/Challenge.CRM.Rommanel/blob/master/docs/ADR-005.md) |	Autenticação e Autorização              |  
+| [ADR-006](https://github.com/alexandredorea/Challenge.CRM.Rommanel/blob/master/docs/ADR-006.md) |	Contrato consistente Backend ↔ Frontend | 
