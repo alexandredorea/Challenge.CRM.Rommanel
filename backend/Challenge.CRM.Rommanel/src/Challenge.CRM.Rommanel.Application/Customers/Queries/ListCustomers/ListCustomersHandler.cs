@@ -9,7 +9,7 @@ namespace Challenge.CRM.Rommanel.Application.Customers.Queries.ListCustomers;
 public sealed class ListCustomersHandler(IAppDbContext context) : IRequestHandler<ListCustomersQuery, Result<PagedResult<CustomerDto>>>
 {
     public async Task<Result<PagedResult<CustomerDto>>> Handle(
-        ListCustomersQuery request,
+        ListCustomersQuery query,
         CancellationToken cancellationToken)
     {
         var customers = context.Customers.AsNoTracking()
@@ -18,17 +18,17 @@ public sealed class ListCustomersHandler(IAppDbContext context) : IRequestHandle
             .AsQueryable();
 
         //TODO: melhorar para campo computado (usar conceito de full text search)
-        if (!string.IsNullOrWhiteSpace(request.Search))
+        if (!string.IsNullOrWhiteSpace(query.Search))
         {
-            var s = request.Search.Trim().ToLowerInvariant();
+            var term = query.Search.Trim().ToLowerInvariant();
             customers = customers.Where(e =>
-                e.Name.ToLower().Contains(s) ||
-                e.DocumentNumber.Contains(s) ||
-                e.Email.ToLower().Contains(s) ||
-                e.Address.PostalCode.Contains(s));
+                e.Name.ToLower().Contains(term) ||
+                e.DocumentNumber.Contains(term) ||
+                e.Email.ToLower().Contains(term) ||
+                e.Address.PostalCode.Contains(term));
         }
 
-        var result = await customers.ToPaginatedListAsync(request.Page, request.PageSize, cancellationToken);
+        var result = await customers.ToPaginatedListAsync(query.Page, query.PageSize, cancellationToken);
 
         return Result<PagedResult<CustomerDto>>.Ok(result);
     }

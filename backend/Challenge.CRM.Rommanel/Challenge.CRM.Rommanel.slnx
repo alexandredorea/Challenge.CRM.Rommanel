@@ -1,11 +1,12 @@
 <Solution>
   <Folder Name="/src/">
-    <Project Path="../Challenge.CRM.Rommane/src/Challenge.CRM.Rommanel.Domain/Challenge.CRM.Rommanel.Domain.csproj" Id="d581ad2e-ff6f-49e7-bd16-218b3ca5995e" />
     <Project Path="src/Challenge.CRM.Rommanel.Api/Challenge.CRM.Rommanel.Api.csproj" Id="86fdd87a-5e4c-46fe-9237-cacfe9d0f8f0" />
     <Project Path="src/Challenge.CRM.Rommanel.Application/Challenge.CRM.Rommanel.Application.csproj" Id="adb03dad-d42a-433e-b044-49f439e3798c" />
+    <Project Path="src/Challenge.CRM.Rommanel.Domain/Challenge.CRM.Rommanel.Domain.csproj" />
     <Project Path="src/Challenge.CRM.Rommanel.Infrastructure/Challenge.CRM.Rommanel.Infrastructure.csproj" Id="458bd036-2acd-4d9e-9cbf-cafe9cb271a7" />
   </Folder>
   <Folder Name="/test/">
     <Project Path="tests/Challenge.CRM.Rommanel.Domain.UnitTests/Challenge.CRM.Rommanel.Domain.UnitTests.csproj" Id="821ef1a2-1523-4bd0-9ce0-9580cc656727" />
+    <Project Path="tests/Challenge.CRM.Rommanel.Integration.Tests/Challenge.CRM.Rommanel.Integration.Tests.csproj" Id="12c9133a-53af-4ba0-a736-995d846dc2ff" />
   </Folder>
 </Solution>

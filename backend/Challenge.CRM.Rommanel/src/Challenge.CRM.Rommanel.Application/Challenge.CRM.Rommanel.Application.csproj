@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Challenge.CRM.Rommane\src\Challenge.CRM.Rommanel.Domain\Challenge.CRM.Rommanel.Domain.csproj" />
+    <ProjectReference Include="..\Challenge.CRM.Rommanel.Domain\Challenge.CRM.Rommanel.Domain.csproj" />
   </ItemGroup>
 
 </Project>
