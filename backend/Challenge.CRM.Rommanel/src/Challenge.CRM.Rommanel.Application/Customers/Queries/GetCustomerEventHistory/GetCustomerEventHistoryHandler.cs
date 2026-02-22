@@ -14,7 +14,7 @@ public sealed class GetCustomerEventHistoryHandler(IAppDbContext repository, IEv
         CancellationToken cancellationToken)
     {
         var exists = await repository.Customers.FindAsync([query.CustomerId], cancellationToken)
-            ?? throw new DomainException("Customer.NotFound", $"Cliente '{query.CustomerId}' não encontrado.");
+            ?? throw new NotFoundException("Customer.NotFound", $"Cliente '{query.CustomerId}' não encontrado.");
 
         var events = await eventStore.LoadAsync(query.CustomerId, cancellationToken);
 

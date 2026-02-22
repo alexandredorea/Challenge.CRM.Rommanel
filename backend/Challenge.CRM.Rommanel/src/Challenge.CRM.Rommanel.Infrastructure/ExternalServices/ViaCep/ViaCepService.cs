@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Challenge.CRM.Rommanel.Application.Common.Models;
+using Challenge.CRM.Rommanel.Domain.Exceptions;
+using Challenge.CRM.Rommanel.Domain.Extensions;
+using Microsoft.Extensions.Logging;
 using System.Net.Http.Json;
 using System.Text.Json;
 
@@ -18,30 +21,32 @@ public sealed class ViaCepService(
         PropertyNameCaseInsensitive = true
     };
 
-    public async Task<ViaCepResponse?> GetAddressByPostalCodeAsync(
+    public async Task<Result<ViaCepResponse>> GetAddressByPostalCodeAsync(
         string postalCode,
         CancellationToken cancellationToken = default)
     {
-        var digits = new string(postalCode.Where(char.IsDigit).ToArray());
+        var digits = postalCode.OnlyDigits();
 
         try
         {
             var response = await httpClient
                 .GetFromJsonAsync<ViaCepResponse>($"{digits}/json/", JsonOptions, cancellationToken);
 
-            if (response is null || response.Erro == true)
+            if (response is null || response.Erro == "true")
             {
                 logger.LogWarning("CEP {PostalCode} não encontrado na API ViaCEP.", digits);
-                return null;
+                throw new NotFoundException("PostalCode.NotFound", $"CEP '{postalCode}' não encontrado na API ViaCEP.");
             }
 
-            return response;
+            return Result<ViaCepResponse>.Ok(response);
         }
         catch (Exception ex)
         {
             logger.LogError(ex,
                 "Falha ao consultar ViaCEP para o CEP {PostalCode}.", digits);
-            return null;
+            //return Result<ViaCepResponse?>.InternalError(ex.Message, "INTERNAL_SERVER_ERROR", $"Falha ao consultar ViaCEP para o CEP {postalCode}.");
+            //return null;
+            throw;
         }
     }
 }

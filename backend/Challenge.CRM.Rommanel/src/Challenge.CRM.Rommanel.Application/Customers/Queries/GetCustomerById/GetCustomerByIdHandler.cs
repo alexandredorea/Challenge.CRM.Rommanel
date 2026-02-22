@@ -12,7 +12,7 @@ public sealed class GetCustomerByIdHandler(IAppDbContext context)
     public async Task<Result<CustomerDto>> Handle(GetCustomerByIdQuery query, CancellationToken cancellationToken)
     {
         var customer = await context.Customers.FindAsync([query.CustomerId], cancellationToken)
-            ?? throw new DomainException("Customer.NotFound", $"Cliente '{query.CustomerId}' não encontrado.");
+            ?? throw new NotFoundException("Customer.NotFound", $"Cliente '{query.CustomerId}' não encontrado.");
 
         return Result<CustomerDto>.Ok(customer.ToDto());
     }

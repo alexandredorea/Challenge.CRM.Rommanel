@@ -4,6 +4,7 @@ using Challenge.CRM.Rommanel.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Polly;
 using Polly.Extensions.Http;
 
@@ -11,25 +12,34 @@ namespace Challenge.CRM.Rommanel.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IHostApplicationBuilder AddInfrastructure(this IHostApplicationBuilder builder)
     {
-        services.AddDbContext<AppDbContext>(opt =>
-            opt.UseNpgsql(
-                configuration.GetConnectionString("Default"),
-                npgsql => npgsql.MigrationsAssembly(
-                    typeof(AppDbContext).Assembly.FullName)));
-        services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
+        builder.AddDatabase();
+        builder.AddViaCepExternalServiceApi();
 
-        services
-            .AddHttpClient<IViaCepService, ViaCepService>(client =>
-            {
-                client.BaseAddress = new Uri("https://viacep.com.br/ws/");
-                client.Timeout = TimeSpan.FromSeconds(10);
-            })
-            .AddPolicyHandler(RetryPolicy)
-            .AddPolicyHandler(CircuitBreakerPolicy);
+        return builder;
+    }
 
-        return services;
+    private static void AddDatabase(this IHostApplicationBuilder builder)
+    {
+        builder.Services.AddDbContext<AppDbContext>(opt =>
+                    opt.UseNpgsql(
+                        builder.Configuration.GetConnectionString("Default"),
+                        npgsql => npgsql.MigrationsAssembly(
+                            typeof(AppDbContext).Assembly.FullName)));
+        builder.Services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
+    }
+
+    private static void AddViaCepExternalServiceApi(this IHostApplicationBuilder builder)
+    {
+        builder.Services
+                    .AddHttpClient<IViaCepService, ViaCepService>(client =>
+                    {
+                        client.BaseAddress = new Uri("https://viacep.com.br/ws/");
+                        client.Timeout = TimeSpan.FromSeconds(10);
+                    })
+                    .AddPolicyHandler(RetryPolicy)
+                    .AddPolicyHandler(CircuitBreakerPolicy);
     }
 
     /// <summary>

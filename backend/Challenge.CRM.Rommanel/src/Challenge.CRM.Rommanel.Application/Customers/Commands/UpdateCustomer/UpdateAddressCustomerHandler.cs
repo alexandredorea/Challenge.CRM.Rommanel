@@ -10,12 +10,12 @@ public sealed class UpdateAddressCustomerHandler(
     IAppDbContext context,
     ICurrentUserService userService,
     ICorrelationIdProvider correlationId,
-    IEventStore eventStore) : IRequestHandler<UpdateAddressCustomer, Result<CustomerDto>>
+    IEventStore eventStore) : IRequestHandler<UpdateAddressCustomerCommand, Result<CustomerDto>>
 {
-    public async Task<Result<CustomerDto>> Handle(UpdateAddressCustomer command, CancellationToken cancellationToken)
+    public async Task<Result<CustomerDto>> Handle(UpdateAddressCustomerCommand command, CancellationToken cancellationToken)
     {
         var customer = await context.Customers.FindAsync([command.CustomerId], cancellationToken)
-            ?? throw new DomainException("Customer.NotFound", $"Cliente '{command.CustomerId}' não encontrado.");
+            ?? throw new NotFoundException("Customer.NotFound", $"Cliente '{command.CustomerId}' não encontrado.");
 
         customer.UpdateAddress(
             command.PostalCode, command.Street, command.AddressNumber,

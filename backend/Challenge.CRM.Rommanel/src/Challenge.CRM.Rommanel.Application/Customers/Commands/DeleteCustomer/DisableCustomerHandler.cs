@@ -15,7 +15,7 @@ public sealed class DisableCustomerHandler(
     public async Task<Result<CustomerDto>> Handle(DisableCustomerCommand command, CancellationToken cancellationToken)
     {
         var customer = await context.Customers.FindAsync([command.CustomerId], cancellationToken)
-            ?? throw new DomainException("Customer.NotFound", $"Cliente '{command.CustomerId}' não encontrado.");
+            ?? throw new NotFoundException("Customer.NotFound", $"Cliente '{command.CustomerId}' não encontrado.");
 
         customer.Disable(userService.UserId, correlationId.Value);
 

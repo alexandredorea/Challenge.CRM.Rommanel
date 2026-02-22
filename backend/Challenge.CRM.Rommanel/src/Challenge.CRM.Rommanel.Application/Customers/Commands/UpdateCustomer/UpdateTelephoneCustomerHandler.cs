@@ -15,7 +15,7 @@ public sealed class UpdateTelephoneCustomerHandler(
     public async Task<Result<CustomerDto>> Handle(UpdateTelephoneCustomerCommand command, CancellationToken cancellationToken)
     {
         var customer = await context.Customers.FindAsync([command.CustomerId], cancellationToken)
-            ?? throw new DomainException("Customer.NotFound", $"Cliente '{command.CustomerId}' não encontrado.");
+            ?? throw new NotFoundException("Customer.NotFound", $"Cliente '{command.CustomerId}' não encontrado.");
 
         customer.UpdateTelephone(command.Telephone, userService.UserId, correlationId.Value);
 

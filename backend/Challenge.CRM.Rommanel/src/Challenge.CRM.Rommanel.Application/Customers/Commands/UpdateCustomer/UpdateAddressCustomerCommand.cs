@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Challenge.CRM.Rommanel.Application.Customers.Commands.UpdateCustomer;
 
-public sealed record UpdateAddressCustomer(
+public sealed record UpdateAddressCustomerCommand(
     [property: JsonIgnore] Guid CustomerId,
     string PostalCode,
     string Street,

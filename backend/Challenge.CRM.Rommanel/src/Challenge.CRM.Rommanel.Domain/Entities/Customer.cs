@@ -146,8 +146,7 @@ public sealed class Customer : AggregateRoot
         string userId = "",
         string correlationId = "")
     {
-        if (!Active)
-            return;
+        EnsureActive(nameof(Active));
 
         Active = false;
         this.ApplyChange(new CustomerDisabled(userId, correlationId));

@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Challenge.CRM.Rommanel.Application\Challenge.CRM.Rommanel.Application.csproj" />
     <ProjectReference Include="..\Challenge.CRM.Rommanel.Infrastructure\Challenge.CRM.Rommanel.Infrastructure.csproj" />
   </ItemGroup>

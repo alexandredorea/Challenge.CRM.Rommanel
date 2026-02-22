@@ -25,6 +25,11 @@ public sealed class GlobalExceptionMiddleware(
         {
             await next(context);
         }
+        catch (NotFoundException ex)
+        {
+            await WriteResponse(context, HttpStatusCode.NotFound,
+                Result<object>.Fail("O recurso não foi encontrado.", ex.Code, ex.Message));
+        }
         catch (ValidationException ex)
         {
             var errors = ex.Errors

@@ -1,4 +1,5 @@
 ﻿using Challenge.CRM.Rommanel.Application;
+using Challenge.CRM.Rommanel.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
@@ -22,6 +23,7 @@ public static class AddServices
 
         // Serviços de Aplicação e Infraestrutura
         builder.AddApplication();
+        builder.AddInfrastructure();
 
         // Keycloak JWT
         builder.Services
@@ -32,25 +34,47 @@ public static class AddServices
                 opt.Audience = builder.Configuration["Keycloak:Audience"];
                 opt.RequireHttpsMetadata =
                     bool.Parse(builder.Configuration["Keycloak:RequireHttpsMetadata"] ?? "true");
+
+                opt.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = ctx =>
+                    {
+                        Log.Warning("JWT inválido: {Error}", ctx.Exception.Message);
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
         builder.Services.AddAuthorization();
+
         builder.Services.AddControllers(option =>
         {
             option.RespectBrowserAcceptHeader = true;
             option.ReturnHttpNotAcceptable = true;
             option.AllowEmptyInputInBodyModelBinding = true;
         });
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddOpenApi();
-        builder.Services
-            .Configure<RouteOptions>(option => { option.LowercaseUrls = true; })
-            .Configure<ApiBehaviorOptions>(option => { option.SuppressModelStateInvalidFilter = true; }); //Suprime a validação automática do ModelState para que o FluentValidation seja o único responsável
+
         builder.Services.ConfigureHttpJsonOptions(option =>
         {
             option.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             option.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         });
+
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddOpenApi();
+        builder.Services
+            .Configure<RouteOptions>(option => { option.LowercaseUrls = true; })
+            .Configure<ApiBehaviorOptions>(option => { option.SuppressModelStateInvalidFilter = true; }); //Suprime a validação automática do ModelState para que o FluentValidation seja o único responsável
+
+        // CORS (para o frontend Angular)
+        builder.Services.AddCors(opt =>
+            opt.AddPolicy("frontend", policy =>
+                policy
+                    .WithOrigins(
+                        builder.Configuration["Cors:AllowedOrigin"] ?? "http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()));
 
         return builder;
     }

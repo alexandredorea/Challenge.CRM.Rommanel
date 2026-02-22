@@ -14,6 +14,7 @@ public static class UseConfigurations
     {
         app.UseGlobalExceptionFromApplication();
         app.UseSerilogRequestLogging();
+        app.UseCors("frontend");
         app.UseHttpsRedirection();
         app.UseAuthentication();
         app.UseAuthorization();

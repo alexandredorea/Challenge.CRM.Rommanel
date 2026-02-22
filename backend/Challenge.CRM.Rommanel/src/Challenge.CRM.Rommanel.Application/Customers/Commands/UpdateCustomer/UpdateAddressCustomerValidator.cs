@@ -2,7 +2,7 @@
 
 namespace Challenge.CRM.Rommanel.Application.Customers.Commands.UpdateCustomer;
 
-public sealed class UpdateAddressCustomerValidator : AbstractValidator<UpdateAddressCustomer>
+public sealed class UpdateAddressCustomerValidator : AbstractValidator<UpdateAddressCustomerCommand>
 {
     public UpdateAddressCustomerValidator()
     {

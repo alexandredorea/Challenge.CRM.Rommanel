@@ -1,8 +1,10 @@
-﻿namespace Challenge.CRM.Rommanel.Infrastructure.ExternalServices.ViaCep;
+﻿using Challenge.CRM.Rommanel.Application.Common.Models;
+
+namespace Challenge.CRM.Rommanel.Infrastructure.ExternalServices.ViaCep;
 
 public interface IViaCepService
 {
-    Task<ViaCepResponse?> GetAddressByPostalCodeAsync(
+    Task<Result<ViaCepResponse>> GetAddressByPostalCodeAsync(
         string postalCode,
         CancellationToken cancellationToken = default);
 }
