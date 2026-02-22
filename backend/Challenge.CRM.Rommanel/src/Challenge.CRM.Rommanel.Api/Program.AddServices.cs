@@ -76,6 +76,13 @@ public static class AddServices
                     .AllowAnyHeader()
                     .AllowCredentials()));
 
+        //// Válida TODOS os serviços na inicialização — falha rápido em dev
+        //builder.Host.UseDefaultServiceProvider(options =>
+        //{
+        //    options.ValidateScopes = builder.Environment.IsDevelopment();
+        //    options.ValidateOnBuild = builder.Environment.IsDevelopment();
+        //});
+
         return builder;
     }
 }

@@ -35,15 +35,14 @@ public sealed class ViaCepService(
             if (response is null || response.Erro == "true")
             {
                 logger.LogWarning("CEP {PostalCode} não encontrado na API ViaCEP.", digits);
-                throw new NotFoundException("PostalCode.NotFound", $"CEP '{postalCode}' não encontrado na API ViaCEP.");
+                throw new NotFoundException("PostalCode.NotFound", $"CEP '{postalCode}' é inválido ou não existe.");
             }
 
             return Result<ViaCepResponse>.Ok(response);
         }
         catch (Exception ex)
         {
-            logger.LogError(ex,
-                "Falha ao consultar ViaCEP para o CEP {PostalCode}.", digits);
+            logger.LogError(ex, "Falha ao consultar ViaCEP para o CEP {PostalCode}.", digits);
             //return Result<ViaCepResponse?>.InternalError(ex.Message, "INTERNAL_SERVER_ERROR", $"Falha ao consultar ViaCEP para o CEP {postalCode}.");
             //return null;
             throw;

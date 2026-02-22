@@ -14,7 +14,8 @@ public sealed class CurrentUserService(IHttpContextAccessor accessor)
 
 public sealed class CorrelationIdProvider(IHttpContextAccessor accessor) : ICorrelationIdProvider
 {
-    public string Value
-        => accessor.HttpContext?.Request.Headers["X-Correlation-ID"].FirstOrDefault()
+    private const string CorrelationIdHeader = "X-Correlation-Id";
+    public string Value 
+        => accessor.HttpContext?.Request.Headers[CorrelationIdHeader].FirstOrDefault()
         ?? Guid.NewGuid().ToString();
 }

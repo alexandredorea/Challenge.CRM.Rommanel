@@ -10,5 +10,6 @@ public sealed record ViaCepResponse(
     [property: JsonPropertyName("uf")] string Uf,
     [property: JsonPropertyName("estado")] string Estado,
     [property: JsonPropertyName("ddd")] string Ddd,
-    [property: JsonPropertyName("erro")] string? Erro
+    [property: JsonPropertyName("erro")]
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] string? Erro
 );

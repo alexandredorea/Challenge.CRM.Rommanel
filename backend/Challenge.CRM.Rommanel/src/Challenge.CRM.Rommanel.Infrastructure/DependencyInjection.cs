@@ -1,6 +1,8 @@
 ﻿using Challenge.CRM.Rommanel.Application.Abstractions;
 using Challenge.CRM.Rommanel.Infrastructure.ExternalServices.ViaCep;
 using Challenge.CRM.Rommanel.Infrastructure.Persistence.Database;
+using Challenge.CRM.Rommanel.Infrastructure.Persistence.EventStore;
+using Challenge.CRM.Rommanel.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +18,10 @@ public static class DependencyInjection
     {
         builder.AddDatabase();
         builder.AddViaCepExternalServiceApi();
-
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+        builder.Services.AddScoped<ICorrelationIdProvider, CorrelationIdProvider>();
+        builder.Services.AddScoped<IEventStore, CustomerEventStore>();
         return builder;
     }
 

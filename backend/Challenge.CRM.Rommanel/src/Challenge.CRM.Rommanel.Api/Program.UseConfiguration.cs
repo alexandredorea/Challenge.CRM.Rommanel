@@ -1,4 +1,5 @@
 ﻿using Challenge.CRM.Rommanel.Application;
+using Scalar.AspNetCore;
 using Serilog;
 
 namespace Challenge.CRM.Rommanel.Api;
@@ -23,6 +24,11 @@ public static class UseConfigurations
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
+            // Fonte: https://scalar.com/products/api-references/integrations/aspnetcore/integration
+            app.MapScalarApiReference("/docs", (options, httpContext) =>
+            {
+                options.WithTitle($"Rommanel Challenge API");
+            });
         }
 
         return app;
