@@ -7,7 +7,7 @@ using Challenge.CRM.Rommanel.Domain.ValueObjects;
 
 namespace Challenge.CRM.Rommanel.Domain.Entities;
 
-public sealed class Customer : AggregateRoot
+public class Customer : AggregateRoot
 {
     public string Name { get; private set; } = string.Empty;
     public DateOnly OriginDate { get; private set; }

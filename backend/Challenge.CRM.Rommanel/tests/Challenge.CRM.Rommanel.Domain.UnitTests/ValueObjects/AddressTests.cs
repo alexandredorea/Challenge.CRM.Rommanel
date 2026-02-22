@@ -26,10 +26,31 @@ public sealed class AddressTests
     }
 
     [Fact]
-    public void Equality_SameValues_ShouldBeEqual()
+    public void Equality_SameAddress_ShouldBeEqual()
     {
         var a = Address.Create("44073-200", "Av. Artemia Pires", "1000", "Registro", "Feira de Santana", "BA");
         var b = Address.Create("44073-200", "Av. Artemia Pires", "1000", "Registro", "Feira de Santana", "BA");
         a.Should().Be(b);
+    }
+
+    [Fact]
+    public void Equality_DifferentAddress_ShouldNotBeEqual()
+    {
+        var a = Address.Create("41810010", "Rua A", "1", "Bairro", "Salvador", "BA");
+        var b = Address.Create("41810010", "Rua B", "2", "Bairro", "Salvador", "BA");
+
+        a.Should().NotBe(b);
+    }
+
+    [Theory]
+    [InlineData("", "Rua", "1", "Bairro", "Cidade", "BA")]        // CEP vazio
+    [InlineData("41810010", "", "1", "Bairro", "Cidade", "BA")]    // rua vazia
+    [InlineData("41810010", "Rua", "1", "Bairro", "Cidade", "XX")] // UF inválida
+    public void Create_WithInvalidData_ShouldThrowDomainException(
+        string cep, string street, string num,
+        string neighborhood, string city, string uf)
+    {
+        var act = () => Address.Create(cep, street, num, neighborhood, city, uf);
+        act.Should().Throw<DomainException>();
     }
 }

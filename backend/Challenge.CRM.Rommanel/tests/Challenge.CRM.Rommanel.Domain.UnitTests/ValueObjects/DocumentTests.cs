@@ -43,4 +43,34 @@ public sealed class DocumentTests
         var b = Document.Create("529.982.247-25");
         a.Should().Be(b);
     }
+
+    [Fact]
+    public void Equality_DifferentDocuments_ShouldNotBeEqual()
+    {
+        var a = Document.Create("529.982.247-25");
+        var b = Document.Create("11.222.333/0001-81");
+
+        a.Should().NotBe(b);
+        (a != b).Should().BeTrue();
+    }
+
+    [Fact]
+    public void Create_WithValidCpf_ShouldReturnIndividual()
+    {
+        var doc = Document.Create("529.982.247-25");
+
+        doc.Type.Should().Be(DocumentType.Individual);
+        doc.Number.Should().Be("52998224725");
+        doc.Formatted.Should().Be("529.982.247-25");
+    }
+
+    [Fact]
+    public void Create_WithValidCnpj_ShouldReturnLegalEntity()
+    {
+        var doc = Document.Create("11.222.333/0001-81");
+
+        doc.Type.Should().Be(DocumentType.LegalEntity);
+        doc.Number.Should().Be("11222333000181");
+        doc.Formatted.Should().Be("11.222.333/0001-81");
+    }
 }
