@@ -1,0 +1,189 @@
+<div class="page-container">
+  <div style="display:flex; align-items:center; gap:16px; margin-bottom:24px;">
+    <button mat-icon-button (click)="cancel()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <div>
+      <h1 style="font-size:1.5rem; font-weight:700; color:#2C2C2C;">
+        {{ isEditMode() ? 'Editar Cliente' : 'Novo Cliente' }}
+      </h1>
+      <p style="color:#6B6B6B; font-size:0.875rem;">
+        {{ isEditMode() ? 'Atualize os dados do cliente' : 'Preencha os dados para cadastrar um novo cliente' }}
+      </p>
+    </div>
+  </div>
+
+  @if (errors().length > 0) {
+    <mat-card style="background:#FFEBEE; margin-bottom:16px; border-left:4px solid #C62828;">
+      <mat-card-content style="padding:12px 16px;">
+        @for (err of errors(); track err) {
+          <p style="color:#C62828; margin:2px 0;">
+            <mat-icon style="font-size:14px; vertical-align:middle;">error</mat-icon>
+            {{ err }}
+          </p>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="submit()">
+
+    <!-- Dados Cadastrais -->
+    <mat-card class="card-rommanel" style="margin-bottom:16px;">
+      <mat-card-header>
+        <mat-card-title>Dados Cadastrais</mat-card-title>
+      </mat-card-header>
+      <mat-card-content style="padding:20px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+
+          <mat-form-field appearance="outline" style="grid-column:1/-1;">
+            <mat-label>Nome / Razão Social</mat-label>
+            <input matInput formControlName="name" placeholder="Nome completo ou razão social">
+            <mat-error>{{ getError('name') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>CPF / CNPJ</mat-label>
+            <input matInput formControlName="document"
+                   placeholder="000.000.000-00 ou 00.000.000/0000-00">
+            <mat-hint>
+              {{ isLegalEntity() ? 'Pessoa Jurídica' : 'Pessoa Física' }}
+            </mat-hint>
+            <mat-error>{{ getError('document') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Data de Nascimento / Fundação</mat-label>
+            <input matInput [matDatepicker]="picker"
+                   formControlName="birthOrFoundationDate">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error>{{ getError('birthOrFoundationDate') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>E-mail</mat-label>
+            <input matInput formControlName="email" type="email">
+            <mat-icon matSuffix>email</mat-icon>
+            <mat-error>{{ getError('email') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Telefone</mat-label>
+            <input matInput formControlName="telephone"
+                   placeholder="(00) 00000-0000">
+            <mat-icon matSuffix>phone</mat-icon>
+            <mat-error>{{ getError('telephone') }}</mat-error>
+          </mat-form-field>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Endereço -->
+    <mat-card class="card-rommanel" style="margin-bottom:16px;">
+      <mat-card-header>
+        <mat-card-title>Endereço</mat-card-title>
+      </mat-card-header>
+      <mat-card-content style="padding:20px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+
+          <mat-form-field appearance="outline">
+            <mat-label>CEP</mat-label>
+            <input matInput formControlName="postalCode" placeholder="00000-000">
+            @if (loadingCep()) {
+              <mat-spinner matSuffix diameter="18"></mat-spinner>
+            } @else {
+              <mat-icon matSuffix>location_on</mat-icon>
+            }
+            <mat-hint>Preenchimento automático ao digitar o CEP</mat-hint>
+            <mat-error>{{ getError('postalCode') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" style="grid-column:1/-1;">
+            <mat-label>Logradouro</mat-label>
+            <input matInput formControlName="street">
+            <mat-error>{{ getError('street') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Número</mat-label>
+            <input matInput formControlName="addressNumber">
+            <mat-error>{{ getError('addressNumber') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Bairro</mat-label>
+            <input matInput formControlName="neighborhood">
+            <mat-error>{{ getError('neighborhood') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Cidade</mat-label>
+            <input matInput formControlName="city">
+            <mat-error>{{ getError('city') }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Estado (UF)</mat-label>
+            <mat-select formControlName="federativeUnit">
+              @for (uf of ufs; track uf) {
+                <mat-option [value]="uf">{{ uf }}</mat-option>
+              }
+            </mat-select>
+            <mat-error>{{ getError('federativeUnit') }}</mat-error>
+          </mat-form-field>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Dados Fiscais (PJ) -->
+    @if (isLegalEntity()) {
+      <mat-card class="card-rommanel" style="margin-bottom:16px;">
+        <mat-card-header>
+          <mat-card-title>Dados Fiscais — Pessoa Jurídica</mat-card-title>
+        </mat-card-header>
+        <mat-card-content style="padding:20px;">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+
+            <mat-form-field appearance="outline">
+              <mat-label>Inscrição Estadual</mat-label>
+              <input matInput formControlName="stateRegistration"
+                     [disabled]="form.get('isStateRegistrationExempt')!.value">
+              <mat-error>{{ getError('stateRegistration') }}</mat-error>
+            </mat-form-field>
+
+            <div style="display:flex; align-items:center;">
+              <mat-checkbox
+                formControlName="isStateRegistrationExempt"
+                (change)="onExemptChange($event.checked)"
+                color="primary">
+                Isento de Inscrição Estadual
+              </mat-checkbox>
+            </div>
+
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+
+    <!-- Ações -->
+    <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:8px;">
+      <button mat-stroked-button type="button" (click)="cancel()">
+        Cancelar
+      </button>
+      <button mat-raised-button class="btn-primary-rommanel"
+              type="submit" [disabled]="loading()">
+        @if (loading()) {
+          <mat-spinner diameter="20" style="display:inline-block; margin-right:8px;"></mat-spinner>
+        }
+        {{ isEditMode() ? 'Salvar Alterações' : 'Cadastrar Cliente' }}
+      </button>
+    </div>
+
+  </form>
+</div>
+
+<!-- Lista de UFs no componente -->
+<ng-container *ngComponentOutlet="null"></ng-container>

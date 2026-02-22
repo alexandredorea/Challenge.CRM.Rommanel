@@ -1,0 +1,188 @@
+/* You can add global styles to this file, and also import other style files */
+// ─── Paleta Rommanel ──────────────────────────────────────────────────────────
+// Dourado:    #C9A84C  (primary)
+// Dourado esc:#9C7A28  (primary dark)
+// Branco:     #FFFFFF  (background)
+// Cinza escuro:#2C2C2C (text)
+// Cinza médio: #6B6B6B (secondary text)
+// Cinza claro: #F5F5F5 (surface)
+
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// ─── Paleta primária — dourado Rommanel ───────────────────────────────────────
+$rommanel-primary-palette: (
+  50:   #FDF6E3,
+  100:  #FAE9B8,
+  200:  #F6DB89,
+  300:  #F2CD59,
+  400:  #EFC236,
+  500:  #C9A84C,
+  600:  #B8962A,
+  700:  #9C7A28,
+  800:  #7F6020,
+  900:  #5C4315,
+  contrast: (
+    50:   #2C2C2C,
+    100:  #2C2C2C,
+    200:  #2C2C2C,
+    300:  #2C2C2C,
+    400:  #2C2C2C,
+    500:  #FFFFFF,
+    600:  #FFFFFF,
+    700:  #FFFFFF,
+    800:  #FFFFFF,
+    900:  #FFFFFF,
+  )
+);
+
+// ─── Paleta accent — cinza escuro ────────────────────────────────────────────
+$rommanel-accent-palette: (
+  50:   #F5F5F5,
+  100:  #E0E0E0,
+  200:  #BDBDBD,
+  300:  #9E9E9E,
+  400:  #757575,
+  500:  #2C2C2C,
+  600:  #212121,
+  700:  #1A1A1A,
+  800:  #121212,
+  900:  #0A0A0A,
+  contrast: (
+    50:   #2C2C2C,
+    100:  #2C2C2C,
+    200:  #2C2C2C,
+    300:  #FFFFFF,
+    400:  #FFFFFF,
+    500:  #FFFFFF,
+    600:  #FFFFFF,
+    700:  #FFFFFF,
+    800:  #FFFFFF,
+    900:  #FFFFFF,
+  )
+);
+
+$rommanel-primary: mat.define-palette($rommanel-primary-palette, 500, 300, 700);
+$rommanel-accent:  mat.define-palette($rommanel-accent-palette,  500, 300, 700);
+$rommanel-warn:    mat.define-palette(mat.$red-palette);
+
+$rommanel-theme: mat.define-light-theme((
+  color: (
+    primary: $rommanel-primary,
+    accent:  $rommanel-accent,
+    warn:    $rommanel-warn,
+  ),
+  typography: mat.define-typography-config(
+    $font-family: "'Montserrat', 'Segoe UI', sans-serif"
+  ),
+  density: 0
+));
+
+@include mat.all-component-themes($rommanel-theme);
+
+// ─── Estilos globais ──────────────────────────────────────────────────────────
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Montserrat', 'Segoe UI', sans-serif;
+  background-color: #F5F5F5;
+  color: #2C2C2C;
+}
+
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.mat-toolbar-rommanel {
+  background: linear-gradient(135deg, #2C2C2C 0%, #1A1A1A 100%);
+  color: #C9A84C;
+  border-bottom: 3px solid #C9A84C;
+
+  .brand-name {
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 1.2rem;
+    color: #C9A84C;
+  }
+
+  .brand-subtitle {
+    font-size: 0.75rem;
+    color: #9E9E9E;
+    margin-left: 8px;
+  }
+}
+
+.card-rommanel {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  background: #FFFFFF;
+
+  .mat-mdc-card-header {
+    background: linear-gradient(135deg, #2C2C2C, #1A1A1A);
+    border-radius: 8px 8px 0 0;
+    padding: 16px 20px;
+
+    .mat-mdc-card-title {
+      color: #C9A84C;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+  }
+}
+
+.btn-primary-rommanel {
+  background-color: #C9A84C !important;
+  color: #FFFFFF !important;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+
+  &:hover { background-color: #9C7A28 !important; }
+  &:disabled { background-color: #E0E0E0 !important; }
+}
+
+.status-active   { color: #2E7D32; font-weight: 600; }
+.status-inactive { color: #C62828; font-weight: 600; }
+
+.event-timeline {
+  .event-item {
+    display: flex;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid #F0F0F0;
+
+    &:last-child { border-bottom: none; }
+
+    .event-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #FDF6E3;
+      border: 2px solid #C9A84C;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #C9A84C;
+      flex-shrink: 0;
+    }
+
+    .event-content {
+      flex: 1;
+
+      .event-type {
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #2C2C2C;
+      }
+
+      .event-meta {
+        font-size: 0.75rem;
+        color: #6B6B6B;
+        margin-top: 2px;
+      }
+    }
+  }
+}
