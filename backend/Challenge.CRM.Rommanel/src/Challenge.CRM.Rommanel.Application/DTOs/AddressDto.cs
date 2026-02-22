@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Challenge.CRM.Rommanel.Application.DTOs;
 
-namespace Challenge.CRM.Rommanel.Application.DTOs
+public sealed record AddressDto(
+string PostalCode,
+string Street,
+string Number,
+string Neighborhood,
+string City,
+string FederativeUnit)
 {
-    internal class AddressDto
-    {
-    }
 }
