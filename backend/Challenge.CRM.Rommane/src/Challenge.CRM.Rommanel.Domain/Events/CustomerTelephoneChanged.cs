@@ -1,4 +1,4 @@
-﻿using Challenge.CRM.Rommanel.Domain.Abstractions;
+﻿using Challenge.CRM.Rommanel.Domain.Primitives.Abstractions;
 using Challenge.CRM.Rommanel.Domain.ValueObjects;
 
 namespace Challenge.CRM.Rommanel.Domain.Events;

@@ -1,4 +1,6 @@
-﻿namespace Challenge.CRM.Rommanel.Domain.Abstractions;
+﻿using Challenge.CRM.Rommanel.Domain.Primitives.Abstractions;
+
+namespace Challenge.CRM.Rommanel.Domain.Primitives;
 
 public abstract class AggregateRoot : Entity
 {

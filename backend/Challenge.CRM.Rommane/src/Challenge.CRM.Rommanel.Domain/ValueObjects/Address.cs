@@ -1,5 +1,5 @@
-﻿using Challenge.CRM.Rommanel.Domain.Abstractions;
-using Challenge.CRM.Rommanel.Domain.Exceptions;
+﻿using Challenge.CRM.Rommanel.Domain.Exceptions;
+using Challenge.CRM.Rommanel.Domain.Primitives;
 
 namespace Challenge.CRM.Rommanel.Domain.ValueObjects;
 
@@ -66,4 +66,7 @@ public sealed class Address : ValueObject
         yield return City;
         yield return FederativeUnit;
     }
+
+    public override string ToString()
+        => $"{Street}, {Number} — {Neighborhood}, {City}/{FederativeUnit} — {PostalCode}";
 }

@@ -1,5 +1,5 @@
-﻿using Challenge.CRM.Rommanel.Domain.Abstractions;
-using Challenge.CRM.Rommanel.Domain.Exceptions;
+﻿using Challenge.CRM.Rommanel.Domain.Exceptions;
+using Challenge.CRM.Rommanel.Domain.Primitives;
 using System.Net.Mail;
 
 namespace Challenge.CRM.Rommanel.Domain.ValueObjects;

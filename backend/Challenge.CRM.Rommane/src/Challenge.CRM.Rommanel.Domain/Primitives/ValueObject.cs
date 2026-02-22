@@ -1,4 +1,4 @@
-﻿namespace Challenge.CRM.Rommanel.Domain.Abstractions;
+﻿namespace Challenge.CRM.Rommanel.Domain.Primitives;
 
 public abstract class ValueObject : IEquatable<ValueObject>
 {

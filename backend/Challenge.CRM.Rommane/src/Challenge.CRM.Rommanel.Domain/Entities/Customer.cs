@@ -1,7 +1,8 @@
-﻿using Challenge.CRM.Rommanel.Domain.Abstractions;
-using Challenge.CRM.Rommanel.Domain.Enumerators;
+﻿using Challenge.CRM.Rommanel.Domain.Enumerators;
 using Challenge.CRM.Rommanel.Domain.Events;
 using Challenge.CRM.Rommanel.Domain.Exceptions;
+using Challenge.CRM.Rommanel.Domain.Primitives;
+using Challenge.CRM.Rommanel.Domain.Primitives.Abstractions;
 using Challenge.CRM.Rommanel.Domain.ValueObjects;
 
 namespace Challenge.CRM.Rommanel.Domain.Entities;
@@ -9,7 +10,7 @@ namespace Challenge.CRM.Rommanel.Domain.Entities;
 public sealed class Customer : AggregateRoot
 {
     public string Name { get; private set; } = string.Empty;
-    public DateTime OriginDate { get; private set; }
+    public DateOnly OriginDate { get; private set; }
     public Document Document { get; private set; } = null!;
     public Email Email { get; private set; } = null!;
     public Telephone Telephone { get; private set; } = null!;
@@ -25,7 +26,7 @@ public sealed class Customer : AggregateRoot
 
     private Customer(
         string name,
-        DateTime originDate,
+        DateOnly originDate,
         Document document,
         Email email,
         Telephone telephone,
@@ -44,7 +45,7 @@ public sealed class Customer : AggregateRoot
     public static Customer Create(
         string name,
         string documentNumber,
-        DateTime originDate,
+        DateOnly originDate,
         string email,
         string telephone,
         string postalCode,
@@ -81,6 +82,8 @@ public sealed class Customer : AggregateRoot
 
     public void UpdateEmail(string email)
     {
+        ValidateOperation(nameof(Email));
+
         var emailVo = Email.Create(email);
 
         if (Email == emailVo)
@@ -98,6 +101,8 @@ public sealed class Customer : AggregateRoot
         string city,
         string federativeUnit)
     {
+        ValidateOperation(nameof(Address));
+
         var addressVo = Address.Create(
             postalCode,
             street,
@@ -115,6 +120,8 @@ public sealed class Customer : AggregateRoot
 
     public void UpdateTelephone(string telephone)
     {
+        ValidateOperation(nameof(Telephone));
+
         var telephoneVo = Telephone.Create(telephone);
 
         if (Telephone == telephoneVo)
@@ -160,15 +167,21 @@ public sealed class Customer : AggregateRoot
                 Telephone = e.Telephone;
                 break;
 
-            case CustomerDisabled e:
+            case CustomerDisabled:
                 Active = false;
                 break;
         }
     }
 
+    private void ValidateOperation(string errorCode)
+    {
+        if (!Active)
+            throw new BusinessRuleException(errorCode, "Operação não permitida para clientes inativos.");
+    }
+
     private static void ValidateBusinessRules(
         Document document,
-        DateTime originDate,
+        DateOnly originDate,
         string? stateRegistration)
     {
         if (document.Type == TypePerson.Individual)
@@ -177,12 +190,12 @@ public sealed class Customer : AggregateRoot
             ValidateStateRegistration(stateRegistration);
     }
 
-    private static void ValidateMinimumAge(DateTime birth)
+    private static void ValidateMinimumAge(DateOnly birthDate)
     {
-        var today = DateTime.UtcNow.Date;
-        var age = today.Year - birth.Year;
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var age = today.Year - birthDate.Year;
 
-        if (birth.Date > today.AddYears(-age))
+        if (birthDate > today.AddYears(-age))
             age--;
 
         if (age < 18)

@@ -27,7 +27,7 @@ public static class PostalCodeExtensions
         if (digits.Length != CepLength)
             return false;
 
-        // CEP "00000000" é inválido — todos zeros não corresponde a nenhuma faixa real
+        // CEP "00000000" é inválido — todos zeros não corresponde a nenhuma faixa valida
         if (digits.Distinct().Count() == 1 && digits[0] == '0')
             return false;
 

@@ -9,7 +9,7 @@ public static class TelephoneExtensions
     /// <summary>
     /// DDDs oficialmente ativos no Brasil conforme ANATEL.
     /// </summary>
-    private static readonly HashSet<string> ValidDdd = new(stringComparer.Ordinal)
+    private static readonly HashSet<string> ValidDdd = new(StringComparer.Ordinal)
     {
         // Sudeste
         "11", "12", "13", "14", "15", "16", "17", "18", "19", // SP

@@ -1,4 +1,4 @@
-﻿namespace Challenge.CRM.Rommanel.Domain.Abstractions;
+﻿namespace Challenge.CRM.Rommanel.Domain.Primitives.Abstractions;
 
 /// <summary>
 /// Implementação base imutável para todos os eventos de domínio.

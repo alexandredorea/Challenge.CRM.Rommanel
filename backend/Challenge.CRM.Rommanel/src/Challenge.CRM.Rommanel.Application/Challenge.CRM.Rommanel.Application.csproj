@@ -19,4 +19,8 @@
     <ProjectReference Include="..\..\..\Challenge.CRM.Rommane\src\Challenge.CRM.Rommanel.Domain\Challenge.CRM.Rommanel.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Customers\" />
+  </ItemGroup>
+
 </Project>

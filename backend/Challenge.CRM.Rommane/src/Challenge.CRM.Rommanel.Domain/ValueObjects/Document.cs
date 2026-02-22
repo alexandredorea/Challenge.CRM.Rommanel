@@ -1,7 +1,7 @@
-﻿using Challenge.CRM.Rommanel.Domain.Abstractions;
-using Challenge.CRM.Rommanel.Domain.Enumerators;
+﻿using Challenge.CRM.Rommanel.Domain.Enumerators;
 using Challenge.CRM.Rommanel.Domain.Exceptions;
 using Challenge.CRM.Rommanel.Domain.Extensions;
+using Challenge.CRM.Rommanel.Domain.Primitives;
 
 namespace Challenge.CRM.Rommanel.Domain.ValueObjects;
 

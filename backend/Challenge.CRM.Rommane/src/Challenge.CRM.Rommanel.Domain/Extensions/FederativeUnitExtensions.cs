@@ -7,7 +7,7 @@
 public static class FederativeUnitExtensions
 {
     private static readonly IReadOnlyDictionary<string, string> UfMap =
-        new Dictionary<string, string>(stringComparer.OrdinalIgnoreCase)
+        new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
             { "AC", "Acre"              }, { "AL", "Alagoas"             },
             { "AM", "Amazonas"          }, { "AP", "Amapá"               },
@@ -35,7 +35,7 @@ public static class FederativeUnitExtensions
     /// Verifica se a string é um nome de estado válido (ex: "Bahia").
     /// </summary>
     public static bool IsValidStateName(this string value)
-        => !string.IsNullOrWhiteSpace(value) && UfMap.Values.Any(v => string.Equals(v, value, stringComparison.OrdinalIgnoreCase));
+        => !string.IsNullOrWhiteSpace(value) && UfMap.Values.Any(v => string.Equals(v, value, StringComparison.OrdinalIgnoreCase));
 
     /// <summary>
     /// Retorna o nome do estado a partir de uma sigla. Retorna null se não encontrado.
@@ -47,7 +47,7 @@ public static class FederativeUnitExtensions
     /// Retorna a sigla a partir do nome do estado. Retorna null se não encontrado.
     /// </summary>
     public static string? ToFederativeUnit(this string state)
-        => UfMap.FirstOrDefault(p => string.Equals(p.Value, state, stringComparison.OrdinalIgnoreCase)).Key;
+        => UfMap.FirstOrDefault(p => string.Equals(p.Value, state, StringComparison.OrdinalIgnoreCase)).Key;
 
     /// <summary>
     /// Normaliza a entrada para sigla maiúscula, independente se veio como sigla ou estado.

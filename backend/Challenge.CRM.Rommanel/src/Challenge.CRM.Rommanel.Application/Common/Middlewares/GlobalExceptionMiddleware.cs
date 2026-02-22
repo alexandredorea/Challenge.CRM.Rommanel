@@ -13,6 +13,12 @@ public sealed class GlobalExceptionMiddleware(
     RequestDelegate next,
     ILogger<GlobalExceptionMiddleware> logger)
 {
+    //Fonte: https://learn.microsoft.com/pt-br/dotnet/fundamentals/code-analysis/quality-rules/ca1869
+    private static readonly JsonSerializerOptions jsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+
     public async Task InvokeAsync(HttpContext context)
     {
         try
@@ -26,7 +32,7 @@ public sealed class GlobalExceptionMiddleware(
                 .ToArray();
 
             await WriteResponse(context, HttpStatusCode.UnprocessableEntity,
-                Result<object>.Fail("Ocorreu um ou mais erro.", errors));
+                Result<object>.Fail("Ocorreu um ou mais erro na validação dos dados.", errors));
         }
         catch (BusinessRuleException ex)
         {
@@ -36,7 +42,7 @@ public sealed class GlobalExceptionMiddleware(
         catch (DomainException ex)
         {
             await WriteResponse(context, HttpStatusCode.BadRequest,
-                Result<object>.Fail(ex.Message, ex.Code, ex.Message));
+                Result<object>.Fail("Ocorreu um ou mais erro.", ex.Code, ex.Message));
         }
         catch (Exception ex)
         {
@@ -55,10 +61,7 @@ public sealed class GlobalExceptionMiddleware(
         context.Response.ContentType = MediaTypeNames.Application.Json;
         context.Response.StatusCode = (int)statusCode;
 
-        var json = JsonSerializer.Serialize(result, new JsonSerializerOptions
-        {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        });
+        var json = JsonSerializer.Serialize(result, jsonOptions);
 
         await context.Response.WriteAsync(json);
     }
