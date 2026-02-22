@@ -13,18 +13,18 @@ public sealed class Document : ValueObject
 {
     public string Number { get; }
 
-    public TypePerson Type { get; }
+    public DocumentType Type { get; }
 
     /// <summary>
     /// Documento formatado com máscara de acordo com o tipo.
     /// CPF:  "529.982.247-25"
     /// CNPJ: "11.222.333/0001-81"
     /// </summary>
-    public string Formatted => Type == TypePerson.Individual
+    public string Formatted => Type == DocumentType.Individual
         ? Number.ToCpfFormatted()
         : Number.ToCnpjFormatted();
 
-    private Document(string number, TypePerson type)
+    private Document(string number, DocumentType type)
     {
         Number = number;
         Type = type;
@@ -46,8 +46,8 @@ public sealed class Document : ValueObject
 
         return digits.Length switch
         {
-            11 when digits.IsValidCpf() => new Document(digits, TypePerson.Individual),
-            14 when digits.IsValidCnpj() => new Document(digits, TypePerson.LegalEntity),
+            11 when digits.IsValidCpf() => new Document(digits, DocumentType.Individual),
+            14 when digits.IsValidCnpj() => new Document(digits, DocumentType.LegalEntity),
             11 => throw new DomainException($"{nameof(Document)}{nameof(Number)}", "O CPF informado não é válido."),
             14 => throw new DomainException($"{nameof(Document)}{nameof(Number)}", "O CNPJ informado não é válido."),
             _ => throw new DomainException($"{nameof(Document)}{nameof(Number)}", "O documento deve ser um CPF (11 dígitos) ou CNPJ (14 dígitos).")

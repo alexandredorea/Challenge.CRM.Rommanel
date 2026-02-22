@@ -1,6 +1,6 @@
 ﻿namespace Challenge.CRM.Rommanel.Domain.Enumerators;
 
-public enum TypePerson
+public enum DocumentType
 {
     Individual = 1,
     LegalEntity = 2

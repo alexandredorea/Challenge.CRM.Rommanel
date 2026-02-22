@@ -37,12 +37,12 @@ public sealed class GlobalExceptionMiddleware(
         catch (BusinessRuleException ex)
         {
             await WriteResponse(context, HttpStatusCode.Conflict,
-                Result<object>.Fail(ex.Message, ex.Code, ex.Message));
+                Result<object>.Fail("Ocorreu um ou mais erro de negócio.", ex.Code, ex.Message));
         }
         catch (DomainException ex)
         {
             await WriteResponse(context, HttpStatusCode.BadRequest,
-                Result<object>.Fail("Ocorreu um ou mais erro.", ex.Code, ex.Message));
+                Result<object>.Fail("Ocorreu um ou mais erro na requisição.", ex.Code, ex.Message));
         }
         catch (Exception ex)
         {

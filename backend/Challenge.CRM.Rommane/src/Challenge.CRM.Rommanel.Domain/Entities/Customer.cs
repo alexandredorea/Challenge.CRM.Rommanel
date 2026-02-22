@@ -40,6 +40,7 @@ public sealed class Customer : AggregateRoot
         Telephone = telephone;
         Address = address;
         StateRegistration = stateRegistration;
+        Active = true;
     }
 
     public static Customer Create(
@@ -51,10 +52,12 @@ public sealed class Customer : AggregateRoot
         string postalCode,
         string street,
         string number,
-        string bairro,
+        string neighborhood,
         string city,
-        string state,
-        string? stateRegistration)
+        string federativeUnit,
+        string? stateRegistration = null,
+        string userId = "",
+        string correlationId = "")
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new DomainException(nameof(Name), "Campo obrigatório.");
@@ -62,7 +65,7 @@ public sealed class Customer : AggregateRoot
         var documentVo = Document.Create(documentNumber);
         var emailVo = Email.Create(email);
         var telephoneVo = Telephone.Create(telephone);
-        var addressVo = Address.Create(postalCode, street, number, bairro, city, state);
+        var addressVo = Address.Create(postalCode, street, number, neighborhood, city, federativeUnit);
 
         ValidateBusinessRules(documentVo, originDate, stateRegistration);
 
@@ -75,21 +78,24 @@ public sealed class Customer : AggregateRoot
             addressVo,
             stateRegistration);
 
-        customer.ApplyChange(new CustomerCreated(customer, string.Empty, string.Empty));
+        customer.ApplyChange(new CustomerCreated(customer, userId, correlationId));
 
         return customer;
     }
 
-    public void UpdateEmail(string email)
+    public void UpdateEmail(
+        string email,
+        string userId = "",
+        string correlationId = "")
     {
-        ValidateOperation(nameof(Email));
+        EnsureActive(nameof(Email));
 
         var emailVo = Email.Create(email);
 
         if (Email == emailVo)
             return;
 
-        this.ApplyChange(new CustomerEmailChanged(emailVo, string.Empty, string.Empty));
+        this.ApplyChange(new CustomerEmailChanged(emailVo, userId, correlationId));
         Email = emailVo;
     }
 
@@ -99,9 +105,11 @@ public sealed class Customer : AggregateRoot
         string number,
         string neighborhood,
         string city,
-        string federativeUnit)
+        string federativeUnit,
+        string userId = "",
+        string correlationId = "")
     {
-        ValidateOperation(nameof(Address));
+        EnsureActive(nameof(Address));
 
         var addressVo = Address.Create(
             postalCode,
@@ -114,30 +122,35 @@ public sealed class Customer : AggregateRoot
         if (Address == addressVo)
             return;
 
-        this.ApplyChange(new CustomerAddressChanged(addressVo, string.Empty, string.Empty));
+        this.ApplyChange(new CustomerAddressChanged(addressVo, userId, correlationId));
         Address = addressVo;
     }
 
-    public void UpdateTelephone(string telephone)
+    public void UpdateTelephone(
+        string telephone,
+        string userId = "",
+        string correlationId = "")
     {
-        ValidateOperation(nameof(Telephone));
+        EnsureActive(nameof(Telephone));
 
         var telephoneVo = Telephone.Create(telephone);
 
         if (Telephone == telephoneVo)
             return;
 
-        this.ApplyChange(new CustomerTelephoneChanged(telephoneVo, string.Empty, string.Empty));
+        this.ApplyChange(new CustomerTelephoneChanged(telephoneVo, userId, correlationId));
         Telephone = telephoneVo;
     }
 
-    public void Disable()
+    public void Disable(
+        string userId = "",
+        string correlationId = "")
     {
         if (!Active)
             return;
 
         Active = false;
-        this.ApplyChange(new CustomerDisabled(string.Empty, string.Empty));
+        this.ApplyChange(new CustomerDisabled(userId, correlationId));
     }
 
     protected override void Apply(IDomainEvent @event)
@@ -173,7 +186,7 @@ public sealed class Customer : AggregateRoot
         }
     }
 
-    private void ValidateOperation(string errorCode)
+    private void EnsureActive(string errorCode)
     {
         if (!Active)
             throw new BusinessRuleException(errorCode, "Operação não permitida para clientes inativos.");
@@ -184,7 +197,7 @@ public sealed class Customer : AggregateRoot
         DateOnly originDate,
         string? stateRegistration)
     {
-        if (document.Type == TypePerson.Individual)
+        if (document.Type == DocumentType.Individual)
             ValidateMinimumAge(originDate);
         else
             ValidateStateRegistration(stateRegistration);

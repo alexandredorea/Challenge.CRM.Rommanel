@@ -12,7 +12,7 @@ public sealed class FederativeUnit : ValueObject
 {
     public string Abbreviation { get; }
 
-    public string Estate => Abbreviation.ToStateName()!;
+    public string State => Abbreviation.ToStateName()!;
 
     private FederativeUnit(string value)
     {

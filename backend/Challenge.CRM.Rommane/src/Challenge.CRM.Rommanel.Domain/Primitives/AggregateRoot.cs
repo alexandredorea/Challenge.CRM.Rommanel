@@ -6,7 +6,7 @@ public abstract class AggregateRoot : Entity
 {
     private readonly List<IDomainEvent> _uncommittedEvents = [];
 
-    public int Version { get; private set; } = -1;
+    public int Version { get; private set; } = 0;
 
     /// <summary>
     /// Construtor para criação de novos agregados.
@@ -33,7 +33,7 @@ public abstract class AggregateRoot : Entity
     /// </summary>
     protected void ApplyChange(IDomainEvent @event)
     {
-        Apply(@event);
+        //Apply(@event);
         Version++;
         var enriched = @event is DomainEvent domainEvent
             ? domainEvent with { Version = Version }
@@ -42,7 +42,9 @@ public abstract class AggregateRoot : Entity
     }
 
     /// <summary>
-    /// Reconstrói o estado do agregado a partir do histórico de eventos (rehydration).
+    /// Replay de eventos (Event Sourcing).
+    /// Reconstrói o estado do agregado a partir do stream do histórico de eventos (rehydration)
+    /// sem disparar novos Domain Events.
     /// </summary>
     /// <remarks>
     /// Não adiciona à lista de eventos não commitados — apenas aplica o estado.

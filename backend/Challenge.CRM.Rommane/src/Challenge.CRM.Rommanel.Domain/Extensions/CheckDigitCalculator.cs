@@ -6,16 +6,16 @@
 /// </summary>
 public sealed class CheckDigitCalculator
 {
-    private string _number;
-    private readonly int _modulo = 11;
-    private readonly bool _useComplement = true;
-    private List<int> _multipliers = [2, 3, 4, 5, 6, 7, 8, 9];
-    private readonly Dictionary<int, string> _replacements = [];
+    private string number;
+    private readonly int modulo = 11;
+    private List<int> multipliers = [2, 3, 4, 5, 6, 7, 8, 9];
+    private readonly Dictionary<int, string> replacements = [];
+    private readonly bool useComplement = true;
 
     public CheckDigitCalculator(string number)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(number);
-        _number = number;
+        this.number = number;
     }
 
     /// <summary>
@@ -25,10 +25,15 @@ public sealed class CheckDigitCalculator
     /// </summary>
     public CheckDigitCalculator WithMultipliers(int start, int end)
     {
-        _multipliers = start <= end
-            ? Enumerable.Range(start, end - start + 1).ToList()
-            : Enumerable.Range(end, start - end + 1).Reverse().ToList();
+        if (start > end)
+            multipliers = Enumerable.Range(end, start - end + 1).Reverse().ToList();
+        else
+        {
+            multipliers = new List<int>();
 
+            for (int i = start; i >= end; i--)
+                multipliers.Add(i);
+        }
         return this;
     }
 
@@ -36,13 +41,13 @@ public sealed class CheckDigitCalculator
     /// Define multiplicadores explicitamente na ordem informada.
     /// Ex: WithMultipliers(5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2)
     /// </summary>
-    public CheckDigitCalculator WithMultipliers(params int[] multipliers)
+    public CheckDigitCalculator WithMultipliers(params int[] multiplicators)
     {
-        if (multipliers is null || multipliers.Length == 0)
+        if (multiplicators is null || multiplicators.Length == 0)
             throw new ArgumentException(
                 "Ao menos um multiplicador deve ser informado.", nameof(multipliers));
 
-        _multipliers = multipliers.ToList();
+        multipliers = multiplicators.ToList();
         return this;
     }
 
@@ -50,11 +55,12 @@ public sealed class CheckDigitCalculator
     /// Substitui resultados específicos do cálculo por uma string.
     /// Ex: ReplaceWith("0", 10, 11) → resultado 10 ou 11 vira "0".
     /// </summary>
-    public CheckDigitCalculator ReplaceWith(string replacement, params int[] results)
+    public CheckDigitCalculator ReplaceWith(string replacement, params int[] digits)
     {
-        foreach (var result in results)
-            _replacements[result] = replacement;
-
+        foreach (var digit in digits)
+        {
+            replacements[digit] = replacement;
+        }
         return this;
     }
 
@@ -63,7 +69,7 @@ public sealed class CheckDigitCalculator
     /// </summary>
     public CheckDigitCalculator AddDigit(string digit)
     {
-        _number = string.Concat(_number, digit);
+        number = string.Concat(number, digit);
         return this;
     }
 
@@ -72,23 +78,19 @@ public sealed class CheckDigitCalculator
     /// </summary>
     public string Calculate()
     {
-        if (string.IsNullOrEmpty(_number))
+        if (string.IsNullOrEmpty(number))
             return string.Empty;
 
-        var sum = 0;
+        var sum = number
+            .Select((digit, index) => char.GetNumericValue(digit) * multipliers[index % multipliers.Count])
+            .Sum();
 
-        // Itera da direita para esquerda — exigência dos algoritmos CPF/CNPJ
-        for (int i = _number.Length - 1, m = 0; i >= 0; i--, m++)
-        {
-            var digit = (int)char.GetNumericValue(_number[i]);
-            sum += digit * _multipliers[m % _multipliers.Count];
-        }
+        var modResult = sum % modulo;
+        var result = useComplement ? modulo - modResult : modResult;
 
-        var modResult = sum % _modulo;
-        var result = _useComplement ? _modulo - modResult : modResult;
+        if (result >= 10)
+            result = 0;
 
-        return _replacements.TryGetValue(result, out var replacement)
-            ? replacement
-            : result.ToString();
+        return replacements.ContainsKey((int)result) ? replacements[(int)result] : result.ToString();
     }
 }
