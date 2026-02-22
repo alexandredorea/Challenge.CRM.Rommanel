@@ -116,7 +116,7 @@ public class CustomersController(ISender mediator) : ControllerBase
             CustomerId: id,
             PostalCode: request.PostalCode,
             Street: request.Street,
-            AddressNumber: request.AddressNumber,
+            AddressNumber: request.Number,
             Neighborhood: request.Neighborhood,
             City: request.City,
             FederativeUnit: request.FederativeUnit), cancellationToken);
