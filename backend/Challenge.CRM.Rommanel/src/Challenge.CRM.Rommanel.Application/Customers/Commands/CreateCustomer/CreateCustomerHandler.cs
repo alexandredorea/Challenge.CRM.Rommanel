@@ -16,7 +16,7 @@ public sealed class CreateCustomerHandler(
         CreateCustomerCommand command,
         CancellationToken cancellationToken)
     {
-        // Criação do agregado — regras de negócio encapsuladas no domínio
+        // regras de negócio encapsuladas no domínio
         var customer = Customer.Create(
             name: command.Name,
             documentNumber: command.DocumentNumber,
