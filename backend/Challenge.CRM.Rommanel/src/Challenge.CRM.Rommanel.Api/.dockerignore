@@ -1,0 +1,54 @@
+# Artefatos de build
+**/bin/
+**/obj/
+**/dist/
+**/node_modules/
+
+# IDE e sistema operacional
+.vs/
+.vscode/
+.idea/
+*.user
+.DS_Store
+Thumbs.db
+
+# Testes
+tests/
+
+# Git
+.git/
+.gitignore
+!.git/HEAD
+!.git/config
+!.git/packed-refs
+!.git/refs/heads/**
+
+# Ambiente
+.env
+*.env.*
+!.env.example
+
+# Documentação
+LICENSE
+*.md
+docs/
+
+# Coverage
+coverage/
+coverage-report/
+
+# Outros
+**/.classpath
+**/.dockerignore
+**/.project
+**/.settings
+**/.toolstarget
+**/*.dbmdl
+**/*.jfm
+**/azds.yaml
+**/charts
+**/docker-compose*
+**/Dockerfile*
+**/npm-debug.log
+**/secrets.dev.yaml
+**/values.dev.yaml
