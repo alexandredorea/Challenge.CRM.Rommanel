@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs';
 import { CustomerService }   from '../../services/customer.service';
 import { PostalCodeService } from '../../services/postal-code.service';
-import { SharedMaterialModule } from '../../../../shared/material.module';
+import { SharedMaterialModule } from '../../../../shared/material/material.module';
 
 @Component({
   selector:    'app-customer-form',
@@ -29,7 +29,12 @@ export class CustomerFormComponent implements OnInit {
   readonly isLegalEntity = signal(false);
   readonly loadingCep  = signal(false);
   readonly errors      = signal<string[]>([]);
-
+  readonly ufs = [
+    'AC','AL','AM','AP','BA','CE','DF','ES','GO',
+    'MA','MG','MS','MT','PA','PB','PE','PI','PR',
+    'RJ','RN','RO','RR','RS','SC','SE','SP','TO'
+  ];
+  
   customerId: string | null = null;
 
   form!: FormGroup;
@@ -113,25 +118,25 @@ export class CustomerFormComponent implements OnInit {
         if (!r.success || !r.data) return;
         const c = r.data;
         this.form.patchValue({
-          name:                      c.name,
-          document:                  c.documentFormatted,
-          birthOrFoundationDate:     c.birthOrFoundationDate,
-          email:                     c.email,
-          telephone:                 c.telephoneFormatted,
-          postalCode:                c.address.postalCode,
-          street:                    c.address.street,
-          addressNumber:             c.address.number,
-          neighborhood:              c.address.neighborhood,
-          city:                      c.address.city,
-          federativeUnit:            c.address.federativeUnit,
-          stateRegistration:         c.stateRegistration,
-          isStateRegistrationExempt: c.isStateRegistrationExempt
+          name:                  c.name,
+          document:              c.documentFormatted,
+          birthOrFoundationDate: c.birthOrFoundationDate,
+          email:                 c.email,
+          telephone:             c.telephoneFormatted,
+          postalCode:            c.address.postalCode,
+          street:                c.address.street,
+          addressNumber:         c.address.number,
+          neighborhood:          c.address.neighborhood,
+          city:                  c.address.city,
+          federativeUnit:        c.address.federativeUnit,
+          stateRegistration:     c.stateRegistration
         });
         this.form.get('document')!.disable();
       },
       complete: () => this.loading.set(false)
     });
   }
+
 
   onExemptChange(checked: boolean): void {
     this.updateStateRegistrationValidators(this.isLegalEntity() && !checked);

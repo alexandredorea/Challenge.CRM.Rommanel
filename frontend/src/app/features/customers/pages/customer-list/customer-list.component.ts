@@ -8,7 +8,7 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { CustomerService }  from '../../services/customer.service';
 import { CustomerDto }      from '../../../../core/models/customer.model';
 import { PagedResult }      from '../../../../core/models/paged-result.model';
-import { SharedMaterialModule } from '../../../../shared/material.module';
+import { SharedMaterialModule } from '../../../../shared/material/material.module';
 import { ConfirmDialogComponent }
   from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 

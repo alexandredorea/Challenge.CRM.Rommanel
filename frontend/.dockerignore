@@ -1,0 +1,18 @@
+# Dependências instaladas localmente (Windows/Mac — incompatíveis com Linux)
+node_modules
+
+# Output do build anterior
+dist
+.angular
+
+# Arquivos de ambiente local
+.env
+*.env.*
+
+# Cache e sistema operacional
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode
+.idea

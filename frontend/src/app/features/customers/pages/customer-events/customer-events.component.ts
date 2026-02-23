@@ -2,7 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router }  from '@angular/router';
 import { CustomerService }         from '../../services/customer.service';
 import { CustomerEventDto }        from '../../../../core/models/customer.model';
-import { SharedMaterialModule }    from '../../../../shared/material.module';
+import { SharedMaterialModule }    from '../../../../shared/material/material.module';
 import { DatePipe, JsonPipe }      from '@angular/common';
 
 @Component({

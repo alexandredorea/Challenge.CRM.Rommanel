@@ -73,8 +73,8 @@
           <ng-container matColumnDef="status">
             <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
             <mat-cell *matCellDef="let c">
-              <span [class]="c.status === 'Active' ? 'status-active' : 'status-inactive'">
-                {{ c.status === 'Active' ? 'Ativo' : 'Inativo' }}
+              <span [class]="c.active ? 'status-active' : 'status-inactive'">
+                {{ c.active ? 'Ativo' : 'Inativo' }}
               </span>
             </mat-cell>
           </ng-container>
@@ -90,12 +90,12 @@
                       (click)="viewEvents(c.id)" matTooltip="Histórico">
                 <mat-icon style="color:#C9A84C">history</mat-icon>
               </button>
-              @if (c.status === 'Active') {
-                <button mat-icon-button color="warn"
-                        (click)="disable(c)" matTooltip="Desativar">
-                  <mat-icon>block</mat-icon>
-                </button>
-              }
+              @if (c.active) {
+              <button mat-icon-button color="warn"
+                      (click)="disable(c)" matTooltip="Desativar">
+                <mat-icon>block</mat-icon>
+              </button>
+            }
             </mat-cell>
           </ng-container>
 

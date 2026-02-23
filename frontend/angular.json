@@ -3,22 +3,22 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "crm-clientes-frontend": {
+    "challenge-crm-rommanel": {
       "projectType": "application",
       "root": "",
       "sourceRoot": "src",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath":    "dist/crm-clientes-frontend",
-            "index":         "src/index.html",
-            "browser":       "src/main.ts",
-            "polyfills":     ["zone.js"],
-            "tsConfig":      "tsconfig.json",
-            "assets":        ["src/favicon.ico", "src/assets"],
-            "styles":        ["src/styles.scss"],
-            "scripts":       []
+            "outputPath": "dist/challenge-crm-rommanel",
+            "index":      "src/index.html",
+            "browser":    "src/main.ts",
+            "polyfills":  ["zone.js"],
+            "tsConfig":   "tsconfig.json",
+            "assets":     ["src/favicon.ico", "src/assets"],
+            "styles":     ["src/styles.scss"],
+            "scripts":    []
           },
           "configurations": {
             "production": {
@@ -30,33 +30,33 @@
               ],
               "budgets": [
                 {
-                  "type":            "initial",
-                  "maximumWarning":  "500kB",
-                  "maximumError":    "1MB"
+                  "type":           "initial",
+                  "maximumWarning": "500kB",
+                  "maximumError":   "1MB"
                 }
               ],
               "outputHashing": "all"
             },
             "development": {
-              "optimization":  false,
+              "optimization":    false,
               "extractLicenses": false,
-              "sourceMap":     true
+              "sourceMap":       true
             }
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "options": {
             "proxyConfig": "proxy.conf.json"
           },
           "configurations": {
-            "production":  { "buildTarget": "crm-clientes-frontend:build:production" },
-            "development": { "buildTarget": "crm-clientes-frontend:build:development" }
+            "production":  { "buildTarget": "challenge-crm-rommanel:build:production"  },
+            "development": { "buildTarget": "challenge-crm-rommanel:build:development" }
           },
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular/build:karma",
           "options": {
             "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig":  "tsconfig.spec.json",

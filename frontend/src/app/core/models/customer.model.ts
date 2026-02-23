@@ -1,26 +1,26 @@
 export interface AddressDto {
-  postalCode:    string;
-  street:        string;
-  number:        string;
-  neighborhood:  string;
-  city:          string;
+  postalCode:     string;
+  street:         string;
+  number:         string;
+  neighborhood:   string;
+  city:           string;
   federativeUnit: string;
 }
 
 export interface CustomerDto {
-  id:                        string;
-  name:                      string;
-  documentNumber:            string;
-  documentFormatted:         string;
-  documentType:              'Individual' | 'LegalEntity';
-  birthOrFoundationDate:     string;
-  email:                     string;
-  telephone:                 string;
-  telephoneFormatted:        string;
-  address:                   AddressDto;
-  stateRegistration:         string | null;
-  active:                    boolean;
-  createdAt:                 string;
+  id:                    string;
+  name:                  string;
+  documentNumber:        string;
+  documentFormatted:     string;
+  documentType:          'Individual' | 'LegalEntity';
+  birthOrFoundationDate: string;
+  email:                 string;
+  telephone:             string;
+  telephoneFormatted:    string;
+  address:               AddressDto;
+  stateRegistration:     string | null;
+  active:                boolean;       
+  createdAt:             string;
 }
 
 export interface CustomerEventDto {
@@ -46,4 +46,5 @@ export interface CreateCustomerRequest {
   city:                      string;
   federativeUnit:            string;
   stateRegistration:         string | null;
+  isStateRegistrationExempt: boolean;
 }

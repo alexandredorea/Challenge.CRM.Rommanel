@@ -1,1 +1,23 @@
-<p>confirm-dialog works!</p>
+<h2 mat-dialog-title
+    style="display:flex; align-items:center; gap:8px; color:#2C2C2C;">
+  <mat-icon [style.color]="data.warn ? '#C62828' : '#C9A84C'">
+    {{ data.warn ? 'warning' : 'help_outline' }}
+  </mat-icon>
+  {{ data.title }}
+</h2>
+
+<mat-dialog-content>
+  <p style="color:#6B6B6B; margin: 8px 0;">{{ data.message }}</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" style="gap:8px; padding:16px;">
+  <button mat-stroked-button (click)="cancel()">
+    Cancelar
+  </button>
+  <button
+    mat-raised-button
+    [color]="data.warn ? 'warn' : 'primary'"
+    (click)="confirm()">
+    {{ data.confirm }}
+  </button>
+</mat-dialog-actions>
