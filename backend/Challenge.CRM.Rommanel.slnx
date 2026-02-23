@@ -1,6 +1,6 @@
 <Solution>
   <Folder Name="/solution items/">
-    <Project Path="../../solution items/docker-compose.dcproj" Id="81dded9d-158b-e303-5f62-77a2896d2a5a">
+    <Project Path="../solution items/docker-compose.dcproj" Id="81dded9d-158b-e303-5f62-77a2896d2a5a">
       <Build />
     </Project>
   </Folder>

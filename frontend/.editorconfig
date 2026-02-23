@@ -1,0 +1,103 @@
+# EditorConfig — https://editorconfig.org
+# Aplica-se a partir desta pasta para baixo
+root = true
+
+# ---------------------------------------------------------------
+# Padrão global — todos os arquivos
+# ---------------------------------------------------------------
+[*]
+charset                  = utf-8
+end_of_line              = lf
+indent_style             = space
+indent_size              = 4
+tab_width                = 4
+trim_trailing_whitespace = true
+insert_final_newline     = true
+
+# ---------------------------------------------------------------
+# C# — Backend .NET
+# ---------------------------------------------------------------
+[*.{cs,csx}]
+indent_size = 4
+
+# Estilo de código C# (Roslyn / Visual Studio)
+dotnet_sort_system_directives_first                                    = true
+dotnet_separate_import_directive_groups                                = false
+csharp_new_line_before_open_brace                                      = all
+csharp_new_line_before_else                                            = true
+csharp_new_line_before_catch                                           = true
+csharp_new_line_before_finally                                         = true
+csharp_indent_case_contents                                            = true
+csharp_indent_switch_labels                                            = true
+csharp_space_after_cast                                                = false
+csharp_space_before_colon_in_inheritance_clause                        = true
+csharp_space_after_colon_in_inheritance_clause                         = true
+csharp_prefer_braces                                                   = true:warning
+csharp_style_var_for_built_in_types                                    = true:suggestion
+csharp_style_var_when_type_is_apparent                                 = true:suggestion
+csharp_style_var_elsewhere                                             = true:suggestion
+csharp_style_expression_bodied_methods                                 = when_on_single_line:suggestion
+csharp_style_expression_bodied_properties                              = true:suggestion
+csharp_style_pattern_matching_over_is_with_cast_check                 = true:suggestion
+csharp_style_throw_expression                                          = true:suggestion
+csharp_style_conditional_delegate_call                                 = true:suggestion
+dotnet_style_qualification_for_field                                   = false:suggestion
+dotnet_style_qualification_for_property                                = false:suggestion
+dotnet_style_object_initializer                                        = true:suggestion
+dotnet_style_collection_initializer                                    = true:suggestion
+dotnet_style_prefer_auto_properties                                    = true:suggestion
+dotnet_style_prefer_is_null_check_over_reference_equality_method       = true:warning
+dotnet_style_null_propagation                                          = true:suggestion
+dotnet_style_coalesce_expression                                       = true:suggestion
+
+# ---------------------------------------------------------------
+# TypeScript / JavaScript — Frontend Angular
+# ---------------------------------------------------------------
+[*.{ts,tsx,js,mjs}]
+indent_size                     = 2
+quote_type                      = single
+ij_typescript_use_double_quotes = false
+
+# ---------------------------------------------------------------
+# HTML / Templates Angular
+# ---------------------------------------------------------------
+[*.{html,component.html}]
+indent_size = 2
+
+# ---------------------------------------------------------------
+# CSS / SCSS / SASS
+# ---------------------------------------------------------------
+[*.{css,scss,sass,less}]
+indent_size = 2
+
+# ---------------------------------------------------------------
+# JSON — configs, package.json, tsconfig, appsettings, etc.
+# ---------------------------------------------------------------
+[*.json]
+indent_size = 2
+
+# ---------------------------------------------------------------
+# XML — .csproj, .props, NuGet, etc.
+# ---------------------------------------------------------------
+[*.{xml,csproj,vbproj,props,targets,nuspec,resx,config}]
+indent_size = 2
+
+# ---------------------------------------------------------------
+# YAML — docker-compose, pipelines CI/CD
+# ---------------------------------------------------------------
+[*.{yml,yaml}]
+indent_size = 2
+
+# ---------------------------------------------------------------
+# Markdown
+# ---------------------------------------------------------------
+[*.md]
+trim_trailing_whitespace = false
+indent_size              = 2
+max_line_length          = off
+
+# ---------------------------------------------------------------
+# Makefile — obrigatoriamente TAB
+# ---------------------------------------------------------------
+[Makefile]
+indent_style = tab
