@@ -1,4 +1,4 @@
-﻿using Challenge.CRM.Rommanel.Application.Common.Models;
+using Challenge.CRM.Rommanel.Application.Common.Models;
 using Challenge.CRM.Rommanel.Domain.Exceptions;
 using Challenge.CRM.Rommanel.Domain.Extensions;
 using Microsoft.Extensions.Logging;
@@ -29,6 +29,9 @@ public sealed class ViaCepService(
 
         try
         {
+            if (!digits.IsValidPostalCode())
+                throw new BusinessRuleException("PostalCode.Conflict", $"'{digits}' não é um CEP válido. Informe 8 dígitos numéricos.");
+
             var response = await httpClient
                 .GetFromJsonAsync<ViaCepResponse>($"{digits}/json/", JsonOptions, cancellationToken);
 
