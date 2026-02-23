@@ -1,20 +1,19 @@
 <!-- Toolbar Rommanel -->
 <mat-toolbar class="mat-toolbar-rommanel">
 
-  <div style="display:flex; align-items:center; gap:12px;">
+  <div style="display:flex; align-items:center; gap:12px; flex-shrink:0;">
     <!-- Logo / Brand -->
     <div style="
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: #C9A84C;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 900; font-size: 1rem; color: #2C2C2C;">
+      width:36px; height:36px; border-radius:50%;
+      background:#C9A84C;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:900; font-size:1rem; color:#2C2C2C;">
       R
     </div>
 
     <div>
-      <span class="brand-name">ROMMANEL</span>
-      <span class="brand-subtitle">CRM Clientes</span>
+      <span class="brand-name">DESAFIO ROMMANEL</span>
+      <span class="brand-subtitle">CRM de Clientes</span>
     </div>
   </div>
 
@@ -22,17 +21,19 @@
   <span style="flex: 1;"></span>
 
   <!-- Usuário logado -->
-  <div style="display:flex; align-items:center; gap:8px;">
-    <mat-icon style="color:#9E9E9E; font-size:18px;">account_circle</mat-icon>
-    <span style="font-size:0.875rem; color:#9E9E9E;">
+  <div style="display:flex; align-items:center; gap:8px; flex-shrink:0; min-width:0;">
+    <mat-icon style="color:#9E9E9E; font-size:18px; flex-shrink:0;">account_circle</mat-icon>
+    <span style="
+      font-size:0.875rem; color:#9E9E9E;
+      white-space:nowrap; overflow:hidden;
+      text-overflow:ellipsis; max-width:160px;">
       {{ keycloak.getFullName() || keycloak.getUserName() }}
     </span>
 
-    <button
-      mat-icon-button
-      (click)="keycloak.logout()"
-      matTooltip="Sair"
-      style="color:#C9A84C; margin-left:8px;">
+    <button mat-icon-button
+            (click)="keycloak.logout()"
+            matTooltip="Sair"
+            style="color:#C9A84C; flex-shrink:0;">
       <mat-icon>logout</mat-icon>
     </button>
   </div>

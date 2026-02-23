@@ -31,7 +31,8 @@ export class KeycloakService {
       return await this.keycloak.init({
         onLoad:           'login-required',
         checkLoginIframe: false,
-        pkceMethod:       'S256'   // PKCE — padrão seguro para SPAs
+        pkceMethod:       'S256',   // PKCE — padrão seguro para SPAs
+        enableLogging:     true
       });
     } catch (err) {
       console.error('[Keycloak] Falha na inicialização:', err);
@@ -55,13 +56,19 @@ export class KeycloakService {
 
   // Renova o token se expirar em menos de 30s
   async refreshToken(): Promise<boolean> {
-    try {
-      return await this.keycloak.updateToken(30);
-    } catch {
+  try {
+    // Só renova se o token expira em menos de 30s
+    // Se retornar false, o token ainda é válido — não é erro
+    const refreshed = await this.keycloak.updateToken(30);
+    return refreshed || this.isLoggedIn;
+  } catch {
+    // Só desloga se realmente não há token válido
+    if (!this.isLoggedIn) {
       await this.logout();
-      return false;
     }
+    return false;
   }
+}
 
   getUserName(): string {
     return this.keycloak.tokenParsed?.['preferred_username'] ?? '';

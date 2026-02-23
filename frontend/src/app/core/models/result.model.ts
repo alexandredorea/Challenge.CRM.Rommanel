@@ -6,6 +6,6 @@ export interface ResultError {
 export interface Result<T> {
   success: boolean;
   message: string;
-  data:    T | null;
-  errors:  ResultError[];
+  data?:   T;
+  errors:   ResultError[];  
 }

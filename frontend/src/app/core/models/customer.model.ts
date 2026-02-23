@@ -46,5 +46,4 @@ export interface CreateCustomerRequest {
   city:                      string;
   federativeUnit:            string;
   stateRegistration:         string | null;
-  isStateRegistrationExempt: boolean;
 }

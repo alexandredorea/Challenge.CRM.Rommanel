@@ -14,17 +14,16 @@
   </div>
 
   @if (errors().length > 0) {
-    <mat-card style="background:#FFEBEE; margin-bottom:16px; border-left:4px solid #C62828;">
-      <mat-card-content style="padding:12px 16px;">
-        @for (err of errors(); track err) {
-          <p style="color:#C62828; margin:2px 0;">
-            <mat-icon style="font-size:14px; vertical-align:middle;">error</mat-icon>
-            {{ err }}
-          </p>
-        }
-      </mat-card-content>
-    </mat-card>
-  }
+  <mat-card style="border-left: 4px solid var(--color-error); margin-bottom: 16px;">
+    <mat-card-content>
+      @for (err of errors(); track err.code) {
+        <p style="color: var(--color-error); font-size: 0.875rem; margin: 4px 0;">
+          {{ err.message }}
+        </p>
+      }
+    </mat-card-content>
+  </mat-card>
+}
 
   <form [formGroup]="form" (ngSubmit)="submit()">
 

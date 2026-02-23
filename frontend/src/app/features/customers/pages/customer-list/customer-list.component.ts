@@ -53,7 +53,7 @@ export class CustomerListComponent implements OnInit {
     this.loading.set(true);
     this.service.list(this.search(), this.page, this.pageSize)
       .subscribe({
-        next:  r => { if (r.success) this.customers.set(r.data); },
+        next:  r => { if (r.success) this.customers.set(r.data ?? null); },
         error: () => {},
         complete: () => this.loading.set(false)
       });

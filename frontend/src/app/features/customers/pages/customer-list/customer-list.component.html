@@ -1,13 +1,19 @@
 <div class="page-container">
 
-  <!-- Toolbar -->
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+  <!-- Toolbar: Cabeçalho com título e botão -->
+  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px;">
     <div>
       <h1 style="font-size:1.5rem; font-weight:700; color:#2C2C2C;">Clientes</h1>
-      <p style="color:#6B6B6B; font-size:0.875rem;">Gerencie a base de clientes</p>
+      <p style="color:#6B6B6B; font-size:0.875rem; margin-top:4px;">
+        Gerencie a base de clientes
+      </p>
     </div>
-    <button mat-raised-button class="btn-primary-rommanel" (click)="create()">
-      <mat-icon>add</mat-icon> Novo Cliente
+
+    <button mat-raised-button
+            class="btn-primary-rommanel"
+            (click)="create()">
+      <mat-icon>add</mat-icon>
+      Novo Cliente
     </button>
   </div>
 
@@ -16,10 +22,11 @@
     <mat-card-content style="padding:16px;">
       <mat-form-field appearance="outline" style="width:100%;">
         <mat-label>Buscar por nome, documento ou e-mail</mat-label>
-        <input matInput [ngModel]="search()"
+        <input matInput
+               [ngModel]="search()"
                (ngModelChange)="onSearchChange($event)"
                placeholder="Digite para buscar...">
-        <mat-icon matSuffix>search</mat-icon>
+        <mat-icon matSuffix style="color:#9E9E9E;">search</mat-icon>
       </mat-form-field>
     </mat-card-content>
   </mat-card>
@@ -30,94 +37,92 @@
       <mat-card-title>
         Lista de Clientes
         @if (customers()?.totalCount) {
-          ({{ customers()!.totalCount }} registros)
+        ({{ customers()!.totalCount }} registros)
         }
       </mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
       @if (loading()) {
-        <div style="display:flex; justify-content:center; padding:40px;">
-          <mat-spinner diameter="48" color="primary"></mat-spinner>
-        </div>
+      <div style="display:flex; justify-content:center; padding:40px;">
+        <mat-spinner diameter="48" color="primary"></mat-spinner>
+      </div>
       } @else {
-        <mat-table [dataSource]="customers()?.items ?? []">
+      <mat-table [dataSource]="customers()?.items ?? []">
 
-          <ng-container matColumnDef="name">
-            <mat-header-cell *matHeaderCellDef>Nome / Razão Social</mat-header-cell>
-            <mat-cell *matCellDef="let c">{{ c.name }}</mat-cell>
-          </ng-container>
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef>Nome / Razão Social</mat-header-cell>
+          <mat-cell *matCellDef="let c">{{ c.name }}</mat-cell>
+        </ng-container>
 
-          <ng-container matColumnDef="documentFormatted">
-            <mat-header-cell *matHeaderCellDef>CPF / CNPJ</mat-header-cell>
-            <mat-cell *matCellDef="let c">{{ c.documentFormatted }}</mat-cell>
-          </ng-container>
+        <ng-container matColumnDef="documentFormatted">
+          <mat-header-cell *matHeaderCellDef>CPF / CNPJ</mat-header-cell>
+          <mat-cell *matCellDef="let c">{{ c.documentFormatted }}</mat-cell>
+        </ng-container>
 
-          <ng-container matColumnDef="documentType">
-            <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
-            <mat-cell *matCellDef="let c">
-              {{ c.documentType === 'Individual' ? 'Pessoa Física' : 'Pessoa Jurídica' }}
-            </mat-cell>
-          </ng-container>
+        <ng-container matColumnDef="documentType">
+          <mat-header-cell *matHeaderCellDef>Tipo</mat-header-cell>
+          <mat-cell *matCellDef="let c">
+            {{ c.documentType === 'Individual' ? 'Pessoa Física' : 'Pessoa Jurídica' }}
+          </mat-cell>
+        </ng-container>
 
-          <ng-container matColumnDef="email">
-            <mat-header-cell *matHeaderCellDef>E-mail</mat-header-cell>
-            <mat-cell *matCellDef="let c">{{ c.email }}</mat-cell>
-          </ng-container>
+        <ng-container matColumnDef="email">
+          <mat-header-cell *matHeaderCellDef>E-mail</mat-header-cell>
+          <mat-cell *matCellDef="let c">{{ c.email }}</mat-cell>
+        </ng-container>
 
-          <ng-container matColumnDef="telephoneFormatted">
-            <mat-header-cell *matHeaderCellDef>Telefone</mat-header-cell>
-            <mat-cell *matCellDef="let c">{{ c.telephoneFormatted }}</mat-cell>
-          </ng-container>
+        <ng-container matColumnDef="telephoneFormatted">
+          <mat-header-cell *matHeaderCellDef>Telefone</mat-header-cell>
+          <mat-cell *matCellDef="let c">{{ c.telephoneFormatted }}</mat-cell>
+        </ng-container>
 
-          <ng-container matColumnDef="status">
-            <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
-            <mat-cell *matCellDef="let c">
-              <span [class]="c.active ? 'status-active' : 'status-inactive'">
-                {{ c.active ? 'Ativo' : 'Inativo' }}
-              </span>
-            </mat-cell>
-          </ng-container>
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+          <mat-cell *matCellDef="let c">
+            <span [class]="c.active ? 'status-active' : 'status-inactive'">
+              {{ c.active ? 'Ativo' : 'Inativo' }}
+            </span>
+          </mat-cell>
+        </ng-container>
 
-          <ng-container matColumnDef="actions">
-            <mat-header-cell *matHeaderCellDef>Ações</mat-header-cell>
-            <mat-cell *matCellDef="let c">
-              <button mat-icon-button color="primary"
-                      (click)="edit(c.id)" matTooltip="Editar">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-icon-button
-                      (click)="viewEvents(c.id)" matTooltip="Histórico">
-                <mat-icon style="color:#C9A84C">history</mat-icon>
-              </button>
-              @if (c.active) {
-              <button mat-icon-button color="warn"
-                      (click)="disable(c)" matTooltip="Desativar">
-                <mat-icon>block</mat-icon>
-              </button>
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef>Ações</mat-header-cell>
+          <mat-cell *matCellDef="let c">
+            <button mat-icon-button color="primary"
+                    (click)="edit(c.id)" matTooltip="Editar">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button
+                    (click)="viewEvents(c.id)" matTooltip="Histórico">
+              <mat-icon style="color:#C9A84C">history</mat-icon>
+            </button>
+            @if (c.active) {
+            <button mat-icon-button color="warn"
+                    (click)="disable(c)" matTooltip="Desativar">
+              <mat-icon>block</mat-icon>
+            </button>
             }
-            </mat-cell>
-          </ng-container>
+          </mat-cell>
+        </ng-container>
 
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell" [attr.colspan]="displayedColumns.length"
-                style="text-align:center; padding:32px; color:#6B6B6B;">
-              Nenhum cliente encontrado.
-            </td>
-          </tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" [attr.colspan]="displayedColumns.length"
+              style="text-align:center; padding:32px; color:#6B6B6B;">
+            Nenhum cliente encontrado.
+          </td>
+        </tr>
+      </mat-table>
 
-        </mat-table>
-
-        <mat-paginator
-          [length]="customers()?.totalCount ?? 0"
-          [pageSize]="pageSize"
-          [pageSizeOptions]="[10, 20, 50]"
-          (page)="onPageChange($event)"
-          showFirstLastButtons>
-        </mat-paginator>
+      <mat-paginator [length]="customers()?.totalCount ?? 0"
+                     [pageSize]="pageSize"
+                     [pageSizeOptions]="[10, 20, 50]"
+                     (page)="onPageChange($event)"
+                     showFirstLastButtons>
+      </mat-paginator>
       }
     </mat-card-content>
   </mat-card>
