@@ -1,4 +1,4 @@
-﻿namespace Challenge.CRM.Rommanel.Application.Common.Models;
+namespace Challenge.CRM.Rommanel.Application.Common.Models;
 
 public sealed class Result
 {
@@ -31,13 +31,13 @@ public sealed class Result<T>
     public bool Success { get; init; }
     public string Message { get; init; } = string.Empty;
     public T? Data { get; init; }
-    public IReadOnlyList<ResultError> Error { get; init; } = [];
+    public IReadOnlyList<ResultError> Errors { get; init; } = [];
 
     public static Result<T> Ok(T data, string message = "Processamento realizado com sucesso") =>
         new() { Success = true, Message = message, Data = data };
 
     public static Result<T> Fail(string message, params ResultError[] errors) =>
-        new() { Success = false, Message = message, Error = errors.ToList() };
+        new() { Success = false, Message = message, Errors = errors.ToList() };
 
     public static Result<T> Fail(string message, string code, string errorMessage) =>
         Fail(message, new ResultError(code, errorMessage));
@@ -55,5 +55,5 @@ public sealed class Result<T>
         Fail(message, new ResultError("CONFLICT", message));
 
     public static Result<T> Validation(List<ResultError> errors, string message = "Erro de validação") =>
-        new() { Success = false, Message = message, Error = errors };
+        new() { Success = false, Message = message, Errors = errors };
 }

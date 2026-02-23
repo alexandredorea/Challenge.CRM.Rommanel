@@ -1,4 +1,4 @@
-﻿using Challenge.CRM.Rommanel.Api.DTOs;
+using Challenge.CRM.Rommanel.Api.DTOs;
 using Challenge.CRM.Rommanel.Application.Common.Models;
 using Challenge.CRM.Rommanel.Application.Customers.Commands.CreateCustomer;
 using Challenge.CRM.Rommanel.Application.Customers.Commands.DeleteCustomer;
