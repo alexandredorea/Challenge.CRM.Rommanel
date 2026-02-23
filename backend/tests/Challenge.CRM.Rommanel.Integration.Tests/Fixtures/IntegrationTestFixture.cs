@@ -1,4 +1,5 @@
-﻿using Challenge.CRM.Rommanel.Infrastructure.Persistence.Database;
+using Challenge.CRM.Rommanel.Infrastructure.Persistence.Database;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,7 @@ using Testcontainers.PostgreSql;
 
 namespace Challenge.CRM.Rommanel.Integration.Tests.Fixtures;
 
-// <summary>
+/// <summary>
 /// Fixture compartilhada entre todos os testes de integração.
 /// Sobe um container PostgreSQL real via Testcontainers.
 /// WebApplicationFactory reconfigura o DbContext para usar este banco.
@@ -15,7 +16,9 @@ namespace Challenge.CRM.Rommanel.Integration.Tests.Fixtures;
 public sealed class IntegrationTestFixture
     : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder("teste")
+    public HttpClient AnonymousClient { get; private set; } = null!;
+
+    private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder()
         .WithDatabase("crm_test")
         .WithUsername("crm")
         .WithPassword("crm@test")
@@ -26,7 +29,15 @@ public sealed class IntegrationTestFixture
     public async ValueTask InitializeAsync()
     {
         await _postgres.StartAsync();
+
+        // Client autenticado (TestAuthHandler sempre aprova)
         Client = CreateClient();
+
+        // Client que simula requisição sem token
+        AnonymousClient = CreateClient(new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false
+        });
 
         // Aplica migrations no banco de teste
         using var scope = Services.CreateScope();
@@ -54,6 +65,22 @@ public sealed class IntegrationTestFixture
             // Adiciona DbContext apontando para o container de teste
             services.AddDbContext<AppDbContext>(opt =>
                 opt.UseNpgsql(_postgres.GetConnectionString()));
+
+            // Remove autenticação JWT original
+            var jwtDescriptor = services.SingleOrDefault(
+                d => d.ServiceType == typeof(IAuthenticationSchemeProvider));
+
+            // Substitui por esquema que sempre autentica
+            services.AddAuthentication("Testing")
+                .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
+                    "Testing", _ => { });
+
+            // Garante que o esquema padrão é o de teste
+            services.PostConfigure<AuthenticationOptions>(opt =>
+            {
+                opt.DefaultAuthenticateScheme = "Testing";
+                opt.DefaultChallengeScheme = "Testing";
+            });
         });
 
         // Desabilita autenticação nos testes de integração

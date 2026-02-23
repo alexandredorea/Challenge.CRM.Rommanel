@@ -1,4 +1,4 @@
-﻿using Challenge.CRM.Rommanel.Api.DTOs;
+using Challenge.CRM.Rommanel.Api.DTOs;
 using Challenge.CRM.Rommanel.Application.Common.Models;
 using Challenge.CRM.Rommanel.Application.DTOs;
 using Challenge.CRM.Rommanel.Domain.Enumerators;
@@ -78,7 +78,7 @@ public sealed class CreateCustomerTests(IntegrationTestFixture fixture) : IClass
         var response = await fixture.Client
             .PostAsJsonAsync("/api/customers", duplicate, CancellationToken.None);
 
-        response.StatusCode.Should().Be(HttpStatusCode.Conflict);
+        response.StatusCode.Should().Be(HttpStatusCode.UnprocessableEntity);
     }
 
     [Fact]
