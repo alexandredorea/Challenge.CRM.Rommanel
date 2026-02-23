@@ -12,7 +12,7 @@ services:
       - "8080"
     volumes:
       # Hot reload de appsettings em dev
-      - ./backend/src/Challenge.CRM.Rommanel.Api/appsettings.Development.json:/app/appsettings.Development.json:ro
+      - ../backend/src/Challenge.CRM.Rommanel.Api/appsettings.Development.json:/app/appsettings.Development.json:ro
 
   postgres:
     ports:

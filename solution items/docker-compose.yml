@@ -4,7 +4,7 @@ services:
 
   # ─── PostgreSQL ─────────────────────────────────────────────────────────────
   postgres:
-    image: postgres:16-alpine
+    image: postgres:alpine
     container_name: crm-postgres
     restart: unless-stopped
     environment:
@@ -16,14 +16,14 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test:     ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 10s
-      timeout:  5s
-      retries:  5
+      test:         ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval:     10s
+      timeout:      5s
+      retries:      5
 
   # ─── Keycloak ────────────────────────────────────────────────────────────────
   keycloak:
-    image: quay.io/keycloak/keycloak:26.0
+    image: quay.io/keycloak/keycloak:26.5.4
     container_name: crm-keycloak
     restart: unless-stopped
     command: start-dev --import-realm
@@ -36,6 +36,7 @@ services:
       KC_DB_PASSWORD:          ${POSTGRES_PASSWORD}
       KC_HOSTNAME_STRICT:      false
       KC_HTTP_ENABLED:         true
+      KC_HEALTH_ENABLED:       true
     ports:
       - "8080:8080"
     volumes:
@@ -44,25 +45,30 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test:     ["CMD-SHELL", "curl -f http://localhost:8080/health/ready || exit 1"]
-      interval: 15s
-      timeout:  10s
-      retries:  10
+      # Usa TCP socket nativo do bash — curl não existe na imagem Keycloak 26
+      #test:         ["CMD-SHELL", "curl -f http://localhost:8080/health/ready || exit 1"]
+      test:
+        - "CMD-SHELL"
+        - "{ printf 'HEAD /health/ready HTTP/1.0\\r\\n\\r\\n' >&0; grep 'HTTP/1.0 200'; } 0<>/dev/tcp/localhost/9000"
+      interval:     20s
+      timeout:      10s
+      retries:      15
+      start_period: 60s
 
   # ─── Backend: API .NET 10 ────────────────────────────────────────────────────
   api:
     build:
-      context: ../backend
+      context:    ../backend
       dockerfile: src/Challenge.CRM.Rommanel.Api/Dockerfile
     container_name: crm-api
     restart: unless-stopped
     environment:
-      ASPNETCORE_ENVIRONMENT:               ${ASPNETCORE_ENVIRONMENT}
-      ConnectionStrings__Default:           Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
-      Keycloak__Authority:                  http://keycloak:8080/realms/${KEYCLOAK_REALM}
-      Keycloak__Audience:                   ${KEYCLOAK_CLIENT_ID}
-      Keycloak__RequireHttpsMetadata:       false
-      Cors__AllowedOrigin:                  http://localhost:${FRONTEND_PORT}
+      ASPNETCORE_ENVIRONMENT:         ${ASPNETCORE_ENVIRONMENT}
+      ConnectionStrings__Default:     Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      Keycloak__Authority:            http://keycloak:8080/realms/${KEYCLOAK_REALM}
+      Keycloak__Audience:             ${KEYCLOAK_CLIENT_ID}
+      Keycloak__RequireHttpsMetadata: false
+      Cors__AllowedOrigin:            http://localhost:${FRONTEND_PORT}
     ports:
       - "${API_PORT}:8080"
     depends_on:
@@ -74,8 +80,8 @@ services:
   # ─── Frontend: Angular ───────────────────────────────────────────────────────
   frontend:
     build:
-      context: ../frontend
-      dockerfile: src/Dockerfile
+      context:    ../frontend
+      dockerfile: Dockerfile
     container_name: crm-frontend
     restart: unless-stopped
     ports:
