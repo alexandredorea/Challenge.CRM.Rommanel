@@ -1,4 +1,4 @@
-﻿using Challenge.CRM.Rommanel.Domain.Exceptions;
+using Challenge.CRM.Rommanel.Domain.Exceptions;
 using Challenge.CRM.Rommanel.Domain.Primitives;
 
 namespace Challenge.CRM.Rommanel.Domain.ValueObjects;
@@ -8,12 +8,16 @@ namespace Challenge.CRM.Rommanel.Domain.ValueObjects;
 /// </summary>
 public sealed class Address : ValueObject
 {
-    public PostalCode PostalCode { get; }
-    public string Street { get; }
-    public string Number { get; }
-    public string Neighborhood { get; }
-    public string City { get; }
-    public FederativeUnit FederativeUnit { get; }
+    public PostalCode PostalCode { get; } = default!;
+    public string Street { get; } = string.Empty;
+    public string Number { get; } = string.Empty;
+    public string Neighborhood { get; } = string.Empty;
+    public string City { get; } = string.Empty;
+    public FederativeUnit FederativeUnit { get; } = default!;
+
+    private Address()
+    {
+    }
 
     private Address(
         PostalCode postalCode,

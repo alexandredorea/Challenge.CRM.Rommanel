@@ -1,4 +1,4 @@
-﻿using Challenge.CRM.Rommanel.Application.Abstractions;
+using Challenge.CRM.Rommanel.Application.Abstractions;
 using Challenge.CRM.Rommanel.Domain.Entities;
 using Challenge.CRM.Rommanel.Infrastructure.Persistence.EventStore;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +13,8 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.HasDefaultSchema("rommanel");
+
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
         base.OnModelCreating(modelBuilder);

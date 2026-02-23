@@ -1,4 +1,4 @@
-﻿using Challenge.CRM.Rommanel.Domain.Exceptions;
+using Challenge.CRM.Rommanel.Domain.Exceptions;
 using Challenge.CRM.Rommanel.Domain.Extensions;
 using Challenge.CRM.Rommanel.Domain.Primitives;
 
@@ -13,8 +13,12 @@ public sealed class Telephone : ValueObject
 {
     //public PhoneType Type { get; }
 
-    public string Number { get; }
+    public string Number { get; } = string.Empty;
     public string FormattedNumber => Number.ToTelephoneFormatted();
+
+    private Telephone()
+    {
+    }
 
     private Telephone(string value) => Number = value;
 

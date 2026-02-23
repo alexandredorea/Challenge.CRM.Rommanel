@@ -1,4 +1,4 @@
-﻿using Challenge.CRM.Rommanel.Domain.Enumerators;
+using Challenge.CRM.Rommanel.Domain.Enumerators;
 using Challenge.CRM.Rommanel.Domain.Exceptions;
 using Challenge.CRM.Rommanel.Domain.Extensions;
 using Challenge.CRM.Rommanel.Domain.Primitives;
@@ -11,7 +11,7 @@ namespace Challenge.CRM.Rommanel.Domain.ValueObjects;
 /// </summary>
 public sealed class Document : ValueObject
 {
-    public string Number { get; }
+    public string Number { get; } = string.Empty;
 
     public DocumentType Type { get; }
 
@@ -23,6 +23,10 @@ public sealed class Document : ValueObject
     public string Formatted => Type == DocumentType.Individual
         ? Number.ToCpfFormatted()
         : Number.ToCnpjFormatted();
+
+    private Document()
+    {
+    }
 
     private Document(string number, DocumentType type)
     {

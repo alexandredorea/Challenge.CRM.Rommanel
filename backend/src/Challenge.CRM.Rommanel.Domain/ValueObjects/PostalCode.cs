@@ -1,4 +1,4 @@
-﻿using Challenge.CRM.Rommanel.Domain.Exceptions;
+using Challenge.CRM.Rommanel.Domain.Exceptions;
 using Challenge.CRM.Rommanel.Domain.Extensions;
 using Challenge.CRM.Rommanel.Domain.Primitives;
 
@@ -10,9 +10,12 @@ namespace Challenge.CRM.Rommanel.Domain.ValueObjects;
 /// </summary>
 public sealed class PostalCode : ValueObject
 {
-    public string Number { get; }
+    public string Number { get; } = string.Empty;
 
     public string Formatted => Number.ToPostalCodeFormatted();
+
+    private PostalCode()
+    { }
 
     private PostalCode(string value)
     {

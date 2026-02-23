@@ -1,4 +1,4 @@
-﻿using Challenge.CRM.Rommanel.Domain.Exceptions;
+using Challenge.CRM.Rommanel.Domain.Exceptions;
 using Challenge.CRM.Rommanel.Domain.Primitives;
 using System.Net.Mail;
 
@@ -6,7 +6,11 @@ namespace Challenge.CRM.Rommanel.Domain.ValueObjects;
 
 public sealed class Email : ValueObject
 {
-    public string Address { get; }
+    public string Address { get; } = string.Empty;
+
+    private Email()
+    {
+    }
 
     private Email(string address) => Address = address;
 

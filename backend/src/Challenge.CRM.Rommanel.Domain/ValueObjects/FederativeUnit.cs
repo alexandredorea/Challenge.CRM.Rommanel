@@ -1,4 +1,4 @@
-﻿using Challenge.CRM.Rommanel.Domain.Exceptions;
+using Challenge.CRM.Rommanel.Domain.Exceptions;
 using Challenge.CRM.Rommanel.Domain.Extensions;
 using Challenge.CRM.Rommanel.Domain.Primitives;
 
@@ -10,9 +10,12 @@ namespace Challenge.CRM.Rommanel.Domain.ValueObjects;
 /// </summary>
 public sealed class FederativeUnit : ValueObject
 {
-    public string Abbreviation { get; }
+    public string Abbreviation { get; } = string.Empty;
 
     public string State => Abbreviation.ToStateName()!;
+
+    private FederativeUnit()
+    { }
 
     private FederativeUnit(string value)
     {
