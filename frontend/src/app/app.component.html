@@ -1,0 +1,45 @@
+<!-- Toolbar Rommanel -->
+<mat-toolbar class="mat-toolbar-rommanel">
+
+  <div style="display:flex; align-items:center; gap:12px;">
+    <!-- Logo / Brand -->
+    <div style="
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: #C9A84C;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 1rem; color: #2C2C2C;">
+      R
+    </div>
+
+    <div>
+      <span class="brand-name">ROMMANEL</span>
+      <span class="brand-subtitle">CRM Clientes</span>
+    </div>
+  </div>
+
+  <!-- Espaçador -->
+  <span style="flex: 1;"></span>
+
+  <!-- Usuário logado -->
+  <div style="display:flex; align-items:center; gap:8px;">
+    <mat-icon style="color:#9E9E9E; font-size:18px;">account_circle</mat-icon>
+    <span style="font-size:0.875rem; color:#9E9E9E;">
+      {{ keycloak.getFullName() || keycloak.getUserName() }}
+    </span>
+
+    <button
+      mat-icon-button
+      (click)="keycloak.logout()"
+      matTooltip="Sair"
+      style="color:#C9A84C; margin-left:8px;">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+
+</mat-toolbar>
+
+<!-- Conteúdo das rotas -->
+<main>
+  <router-outlet />
+</main>

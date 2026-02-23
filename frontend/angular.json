@@ -1,76 +1,69 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
-  "cli": {
-    "packageManager": "npm"
-  },
   "newProjectRoot": "projects",
   "projects": {
-    "challenge-crm-rommanel": {
+    "crm-clientes-frontend": {
       "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
       "root": "",
       "sourceRoot": "src",
-      "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular/build:application",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "browser": "src/main.ts",
-            "tsConfig": "tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
-            "styles": [
-              "src/styles.scss"
-            ]
+            "outputPath":    "dist/crm-clientes-frontend",
+            "index":         "src/index.html",
+            "browser":       "src/main.ts",
+            "polyfills":     ["zone.js"],
+            "tsConfig":      "tsconfig.json",
+            "assets":        ["src/favicon.ico", "src/assets"],
+            "styles":        ["src/styles.scss"],
+            "scripts":       []
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with":    "src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
-                  "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "type":            "initial",
+                  "maximumWarning":  "500kB",
+                  "maximumError":    "1MB"
                 }
               ],
               "outputHashing": "all"
             },
             "development": {
-              "optimization": false,
+              "optimization":  false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap":     true
             }
-          },
-          "defaultConfiguration": "production"
+          }
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          },
           "configurations": {
-            "production": {
-              "buildTarget": "challenge-crm-rommanel:build:production"
-            },
-            "development": {
-              "buildTarget": "challenge-crm-rommanel:build:development"
-            }
+            "production":  { "buildTarget": "crm-clientes-frontend:build:production" },
+            "development": { "buildTarget": "crm-clientes-frontend:build:development" }
           },
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "polyfills": ["zone.js", "zone.js/testing"],
+            "tsConfig":  "tsconfig.spec.json",
+            "assets":    ["src/favicon.ico", "src/assets"],
+            "styles":    ["src/styles.scss"],
+            "scripts":   []
+          }
         }
       }
     }

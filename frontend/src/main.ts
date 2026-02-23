@@ -1,6 +1,7 @@
+//Com APP_INITIALIZER, o main.ts fica limpo — o Keycloak é inicializado automaticamente pelo Angular antes do primeiro componente renderizar.
 import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './app/app.config';
-import { App } from './app/app';
+import { appConfig }            from './app/app.config';
+import { AppComponent }         from './app/app.component';
 
-bootstrapApplication(App, appConfig)
-  .catch((err) => console.error(err));
+bootstrapApplication(AppComponent, appConfig)
+  .catch(err => console.error('[Bootstrap] Erro:', err));
